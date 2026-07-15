@@ -1,0 +1,52 @@
+---
+/**
+ * zakadev button. Primary = white label + orange dot; secondary = plain outline.
+ * Never orange-filled (per the design system).
+ */
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary';
+  class?: string;
+}
+
+const { href, variant = 'primary', class: className } = Astro.props;
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag class:list={['btn', className]} href={href}>
+  <slot />
+  {variant === 'primary' && <span class="dot" aria-hidden="true"></span>}
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    background: var(--surface-1);
+    border: 1px solid var(--border-2);
+    border-radius: var(--radius-2);
+    color: var(--text-primary);
+    font: 500 15px/1 var(--font-sans);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--duration-base) var(--ease-brand);
+  }
+
+  .btn:hover {
+    background: var(--surface-2);
+    border-color: rgba(252, 163, 17, 0.6);
+    box-shadow: var(--glow-accent);
+    transform: translateY(-1px);
+    color: var(--text-primary);
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--orange);
+    flex: none;
+  }
+</style>

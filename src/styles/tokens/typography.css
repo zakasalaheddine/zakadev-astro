@@ -1,0 +1,26 @@
+/*
+ * Type scale. The homepage overrides the display/body families with Sora +
+ * IBM Plex Sans (see global.css), so the design-system's STIX Two Text import
+ * is intentionally omitted here — it would only load bytes that are never used.
+ */
+:root {
+  /* Families — overridden in global.css to the homepage's Sora / IBM Plex Sans. */
+  --font-serif: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* Scale (size / line-height / weight / tracking) */
+  --type-display: 400 72px/82px var(--font-serif);   /* -0.03em */
+  --type-h1: 400 56px/64px var(--font-serif);        /* -0.02em */
+  --type-h2: 400 44px/52px var(--font-serif);        /* -0.01em */
+  --type-h3: 500 32px/40px var(--font-sans);
+  --type-h4: 500 24px/32px var(--font-sans);
+  --type-body-lg: 400 20px/34px var(--font-sans);
+  --type-body: 400 16px/30px var(--font-sans);
+  --type-small: 400 14px/24px var(--font-sans);
+  --type-caption: 500 12px/18px var(--font-sans);    /* 0.15em tracking, uppercase */
+
+  --tracking-display: -0.03em;
+  --tracking-h1: -0.02em;
+  --tracking-h2: -0.01em;
+  --tracking-caption: 0.15em;
+}

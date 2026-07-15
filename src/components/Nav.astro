@@ -1,0 +1,159 @@
+---
+const links = [
+  { label: 'Work', href: '#work' },
+  { label: 'Services', href: '#services' },
+  { label: 'Process', href: '#process' },
+  { label: 'About', href: '#about' },
+  { label: 'Contact', href: '#contact' },
+];
+---
+
+<header class="nav">
+  <a class="brand" href="#top" aria-label="zakadev — home">
+    <img src="/assets/zakadev-white.svg" alt="" class="brand-mark" />
+    <span class="brand-name">zakadev</span>
+  </a>
+
+  <!-- CSS-only mobile menu toggle -->
+  <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+  <label for="nav-toggle" class="burger" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </label>
+
+  <nav class="links">
+    {links.map((l) => <a href={l.href}>{l.label}</a>)}
+  </nav>
+
+  <a href="#contact" class="book">
+    Book a Call
+    <span class="book-dot" aria-hidden="true"></span>
+  </a>
+</header>
+
+<style>
+  .nav {
+    position: relative;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--container-pad);
+    height: 88px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-primary);
+  }
+
+  .brand-mark {
+    height: 28px;
+    width: auto;
+  }
+
+  .brand-name {
+    font: 500 20px/1 var(--font-sans);
+    letter-spacing: -0.02em;
+  }
+
+  .links {
+    display: flex;
+    gap: 36px;
+    font: var(--type-small);
+  }
+
+  .book {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-primary);
+    font: 500 14px/1 var(--font-sans);
+    white-space: nowrap;
+  }
+
+  .book-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--orange);
+    flex: none;
+  }
+
+  /* Mobile menu machinery — hidden on desktop */
+  .nav-toggle,
+  .burger {
+    display: none;
+  }
+
+  @media (max-width: 860px) {
+    .burger {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      padding: 8px;
+      cursor: pointer;
+      order: 3;
+    }
+
+    .burger span {
+      height: 2px;
+      width: 100%;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transition: transform var(--duration-base) var(--ease-brand),
+        opacity var(--duration-base) var(--ease-brand);
+    }
+
+    .nav-toggle:checked ~ .burger span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    .nav-toggle:checked ~ .burger span:nth-child(2) {
+      opacity: 0;
+    }
+    .nav-toggle:checked ~ .burger span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .links {
+      position: absolute;
+      top: 88px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px var(--container-pad) 20px;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border-1);
+      border-bottom: 1px solid var(--border-1);
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: max-height var(--duration-slow) var(--ease-brand),
+        opacity var(--duration-base) var(--ease-brand);
+      z-index: 20;
+    }
+
+    .links a {
+      padding: 12px 0;
+      font-size: 16px;
+    }
+
+    .nav-toggle:checked ~ .links {
+      max-height: 360px;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .book {
+      display: none;
+    }
+  }
+</style>

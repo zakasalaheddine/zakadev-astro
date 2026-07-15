@@ -1,0 +1,75 @@
+---
+/** Service/feature card: orange outline icon, H4 title, small gray body, arrow footer. */
+interface Props {
+  icon?: string;
+  title: string;
+  description: string;
+  href?: string;
+}
+
+const { icon, title, description, href = '#' } = Astro.props;
+---
+
+<a class="card" href={href}>
+  {icon && <div class="icon" set:html={icon} />}
+  <div class="title">{title}</div>
+  <div class="desc">{description}</div>
+  <span class="arrow" aria-hidden="true">&rarr;</span>
+</a>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-4);
+    padding: 32px;
+    color: inherit;
+    text-decoration: none;
+    transition: all var(--duration-base) var(--ease-brand);
+  }
+
+  .card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    color: inherit;
+  }
+
+  .icon {
+    color: var(--orange);
+    height: 28px;
+  }
+
+  /* The icon prop arrives as a raw <svg> string; keep it sized consistently. */
+  .icon :global(svg) {
+    width: 26px;
+    height: 26px;
+    display: block;
+  }
+
+  .title {
+    font: var(--type-h4);
+    color: var(--text-primary);
+  }
+
+  .desc {
+    font: var(--type-small);
+    color: var(--text-secondary);
+    flex: 1;
+  }
+
+  .arrow {
+    color: var(--text-primary);
+    font-size: 20px;
+    line-height: 1;
+    transition: transform var(--duration-base) var(--ease-brand);
+  }
+
+  .card:hover .arrow {
+    transform: translateX(4px);
+    color: var(--orange);
+  }
+</style>

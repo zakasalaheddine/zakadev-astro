@@ -1,0 +1,21 @@
+:root {
+  /* Border radius */
+  --radius-1: 4px;
+  --radius-2: 8px;
+  --radius-3: 12px;
+  --radius-4: 16px;
+  --radius-5: 20px;
+  --radius-6: 24px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.25);
+  --shadow-md: 0 10px 30px rgba(0,0,0,0.35);
+  --shadow-lg: 0 30px 80px rgba(0,0,0,0.45);
+  --glow-accent: 0 0 0 1px rgba(252,163,17,0.35), 0 0 24px rgba(252,163,17,0.15);
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+  --ease-brand: cubic-bezier(0.22, 0.61, 0.36, 1);
+}

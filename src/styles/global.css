@@ -1,0 +1,73 @@
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/spacing.css";
+@import "./tokens/effects.css";
+
+/*
+ * Homepage font overrides. These come AFTER the token imports (same :root
+ * specificity), so they win — the display serif renders as Sora and body text
+ * as IBM Plex Sans, matching the design's intended look.
+ */
+:root {
+  --font-serif: "Sora", "Helvetica Neue", sans-serif;
+  --font-sans: "IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color var(--duration-base) var(--ease-brand);
+}
+
+a:hover {
+  color: var(--text-primary);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+h1, h2, h3, h4, p {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Tighten the outer padding as the viewport narrows. Every section reads its
+   horizontal padding from this token, so one place controls them all. */
+@media (max-width: 900px) {
+  :root { --container-pad: 40px; }
+}
+@media (max-width: 560px) {
+  :root { --container-pad: 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition-duration: 1ms !important; }
+}

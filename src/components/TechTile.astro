@@ -1,0 +1,42 @@
+---
+/** Bordered dark tile for a third-party logo. Falls back to a monospace label. */
+interface Props {
+  label: string;
+  size?: number;
+}
+
+const { label, size = 64 } = Astro.props;
+---
+
+<div class="tile" style={`width:${size}px;height:${size}px`}>
+  <span>{label}</span>
+</div>
+
+<style>
+  .tile {
+    flex: none;
+    background: var(--surface-2);
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font: 500 11px/1 monospace;
+    overflow: hidden;
+    transition: all var(--duration-base) var(--ease-brand);
+  }
+
+  .tile:hover {
+    border-color: var(--border-hover);
+    color: var(--text-primary);
+  }
+
+  .tile span {
+    opacity: 0.7;
+  }
+
+  .tile:hover span {
+    opacity: 1;
+  }
+</style>

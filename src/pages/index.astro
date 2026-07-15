@@ -1,0 +1,622 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Button from '../components/Button.astro';
+import SectionLabel from '../components/SectionLabel.astro';
+import FeatureCard from '../components/FeatureCard.astro';
+import ProcessStep from '../components/ProcessStep.astro';
+import TechTile from '../components/TechTile.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import Spiral from '../components/Spiral.astro';
+
+const svg = (paths: string) =>
+  `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>`;
+
+const services = [
+  {
+    icon: svg('<path d="M12 2l3 5 5 1-4 4 1 6-5-3-5 3 1-6-4-4 5-1z"/>'),
+    title: 'AI Sales Systems',
+    description: 'From lead capture to closed deals. Automated.',
+  },
+  {
+    icon: svg('<path d="M12 19l7-14-16 7 6 2z"/><path d="M9 14l3 5"/>'),
+    title: 'AI Marketing Systems',
+    description: 'Content, ads, SEO and social — on autopilot.',
+  },
+  {
+    icon: svg('<path d="M12 3l7.8 4.5v9L12 21l-7.8-4.5v-9z"/><circle cx="12" cy="12" r="3"/>'),
+    title: 'AI Operations Systems',
+    description: 'Streamline internal workflows and team productivity.',
+  },
+  {
+    icon: svg('<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l2.6 12h11L21 8H6"/>'),
+    title: 'AI Commerce Systems',
+    description: 'Personalized experiences that convert and scale.',
+  },
+];
+
+const steps = [
+  { number: '01', title: 'Discover', description: 'Find repetitive work.', showLine: true },
+  { number: '02', title: 'Architect', description: 'Design the right automation.', showLine: true },
+  { number: '03', title: 'Build', description: 'Integrate AI with your existing tools.', showLine: true },
+  { number: '04', title: 'Launch', description: 'Monitor, optimize, and scale.', showLine: false },
+];
+
+const tech = ['GPT', 'AI', 'N8N', 'MAKE', 'NOTION', 'DB', 'PG', 'STRIPE', 'VERCEL', 'LINEAR', 'G', 'SLACK'];
+---
+
+<BaseLayout>
+  <div id="top" class="page">
+    <Nav />
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-copy">
+        <h1 class="hero-title">
+          I build systems<br />that <span class="accent">grow</span><br />businesses.
+        </h1>
+        <p class="hero-sub">
+          AI marketing systems architect for founders who want automation that drives
+          real results.
+        </p>
+        <div>
+          <Button href="#contact">Book a strategy call</Button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <Spiral />
+        <div class="tag tag-automate">Automate<span class="tag-line"></span></div>
+        <div class="tag tag-optimize"><span class="tag-line"></span>Optimize</div>
+        <div class="tag tag-scale">Scale</div>
+      </div>
+    </section>
+
+    <!-- Trusted by -->
+    <section class="trusted">
+      <div class="trusted-label">
+        <SectionLabel color="var(--text-muted)">Trusted by founders</SectionLabel>
+      </div>
+      <div class="logos">
+        <span class="logo logo-elunoire">ELUNOIRE</span>
+        <span class="logo logo-lincx">LINCX</span>
+        <span class="logo logo-bizee">BIZEE</span>
+        <span class="logo logo-spark">SPARK REVENUE</span>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="about">
+      <div class="about-photo">
+        <ImageSlot placeholder="Drop a b&w architectural photo" />
+      </div>
+      <div class="about-copy">
+        <SectionLabel>About me</SectionLabel>
+        <h2 class="h2">Engineer by background.<br />Builder by choice.</h2>
+        <p class="body-sm">
+          I started as a software engineer building production applications.
+        </p>
+        <p class="body-sm">
+          Today I combine engineering and AI to design systems that automate marketing,
+          operations, and customer experiences.
+        </p>
+        <a href="#about" class="text-link">More about me <span class="accent">&rarr;</span></a>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="services section-inner">
+      <div class="lead">
+        <SectionLabel>What I build</SectionLabel>
+      </div>
+      <div class="services-grid">
+        {
+          services.map((s) => (
+            <FeatureCard
+              icon={s.icon}
+              title={s.title}
+              description={s.description}
+              href="#work"
+            />
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Featured work -->
+    <section id="work" class="work">
+      <div class="work-inner section-inner">
+        <div class="work-copy">
+          <SectionLabel>Featured work</SectionLabel>
+          <h2 class="h2">AI Print-on-Demand Platform</h2>
+          <p class="body-sm">
+            End-to-end automation for a print-on-demand business. From image upload to
+            fulfillment — no manual work.
+          </p>
+          <a href="#work" class="text-link">
+            View case study <span class="dot" aria-hidden="true"></span>
+          </a>
+        </div>
+        <div class="work-media">
+          <div class="work-frame">
+            <ImageSlot placeholder="Drop a product dashboard screenshot" />
+          </div>
+          <div class="work-controls">
+            <div class="counter">01<span class="counter-line"></span>03</div>
+            <div class="arrows">
+              <button aria-label="Previous">&lsaquo;</button>
+              <button aria-label="Next">&rsaquo;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Process -->
+    <section id="process" class="process section-inner">
+      <div class="lead lead-lg">
+        <SectionLabel>My process</SectionLabel>
+      </div>
+      <div class="process-grid">
+        {
+          steps.map((s) => (
+            <ProcessStep
+              number={s.number}
+              title={s.title}
+              description={s.description}
+              showLine={s.showLine}
+            />
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Tech stack -->
+    <section class="tech">
+      <div class="section-inner">
+        <div class="lead">
+          <SectionLabel color="var(--text-muted)">Tech stack</SectionLabel>
+        </div>
+        <div class="tech-grid">
+          {tech.map((t) => <TechTile label={t} size={64} />)}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA footer -->
+    <footer id="contact" class="footer">
+      <div class="footer-top section-inner">
+        <h2 class="footer-title">
+          Ready to build your<br /><span class="accent">next system</span>?
+        </h2>
+        <div class="footer-cta">
+          <p class="body-sm">Let's automate what's holding your business back.</p>
+          <div>
+            <Button href="#contact">Book a call</Button>
+          </div>
+        </div>
+        <a href="#top" class="footer-brand" aria-label="zakadev — home">
+          <img src="/assets/zakadev-white.svg" alt="" class="footer-mark" />
+          <span>zakadev</span>
+        </a>
+      </div>
+      <div class="footer-bar">
+        <div class="footer-bar-inner section-inner">
+          <span>&copy; 2026 zakadev. All rights reserved.</span>
+          <span>Built with focus. Engineered for results.</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    min-height: 100vh;
+  }
+
+  /* Shared container. Vertical padding lives on each section. */
+  .section-inner {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding-left: var(--container-pad);
+    padding-right: var(--container-pad);
+  }
+
+  .accent {
+    color: var(--orange);
+  }
+
+  .h2 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(30px, 4.4vw, 38px);
+    line-height: 1.26;
+    letter-spacing: var(--tracking-h2);
+  }
+
+  .body-sm {
+    font: 400 15px/1.73 var(--font-sans);
+    color: var(--text-secondary);
+  }
+
+  .text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-primary);
+    font: 500 14px/1 var(--font-sans);
+    width: fit-content;
+  }
+
+  .text-link .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--orange);
+    flex: none;
+  }
+
+  .lead {
+    margin-bottom: 32px;
+  }
+  .lead-lg {
+    margin-bottom: 40px;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 56px var(--container-pad) 40px;
+    display: flex;
+    align-items: center;
+    gap: 48px;
+  }
+
+  .hero-copy {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    min-width: 0;
+  }
+
+  .hero-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(40px, 6.6vw, 68px);
+    line-height: 1.13;
+    letter-spacing: var(--tracking-display);
+  }
+
+  .hero-sub {
+    font: 400 18px/1.67 var(--font-sans);
+    color: var(--text-secondary);
+    max-width: 400px;
+  }
+
+  .hero-visual {
+    position: relative;
+    width: 560px;
+    height: 420px;
+    flex: none;
+    max-width: 100%;
+  }
+
+  .tag {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font: var(--type-caption);
+    letter-spacing: var(--tracking-caption);
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .tag-line {
+    width: 40px;
+    height: 1px;
+    background: var(--border-hover);
+  }
+  .tag-automate {
+    top: 24px;
+    left: 120px;
+  }
+  .tag-optimize {
+    top: 170px;
+    right: 0;
+  }
+  .tag-scale {
+    bottom: 10px;
+    left: 200px;
+  }
+
+  /* ---------- Trusted ---------- */
+  .trusted {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--container-pad) 96px;
+  }
+  .trusted-label {
+    margin-bottom: 28px;
+  }
+  .logos {
+    display: flex;
+    gap: 64px;
+    align-items: center;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+  }
+  .logo {
+    opacity: 0.75;
+  }
+  .logo-elunoire {
+    font: 400 17px/1 var(--font-serif);
+    letter-spacing: 0.25em;
+  }
+  .logo-lincx {
+    font: 700 19px/1 var(--font-sans);
+    letter-spacing: 0.12em;
+  }
+  .logo-bizee {
+    font: 800 19px/1 var(--font-sans);
+    letter-spacing: 0.06em;
+  }
+  .logo-spark {
+    font: 700 15px/1 var(--font-serif);
+    letter-spacing: 0.04em;
+  }
+
+  /* ---------- About ---------- */
+  .about {
+    background: var(--bg-secondary);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+  }
+  .about-photo {
+    position: relative;
+    min-height: 440px;
+  }
+  .about-copy {
+    padding: 96px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 640px;
+  }
+
+  /* ---------- Services ---------- */
+  .services {
+    padding-top: 120px;
+    padding-bottom: 120px;
+  }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  /* ---------- Featured work ---------- */
+  .work {
+    background: var(--bg-secondary);
+    padding: 120px 0;
+  }
+  .work-inner {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .work-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .work-frame {
+    height: 380px;
+    border-radius: var(--radius-4);
+    border: 1px solid var(--border-1);
+    box-shadow: var(--shadow-lg);
+    transform: perspective(1200px) rotateY(-6deg) rotateX(2deg);
+    overflow: hidden;
+    position: relative;
+  }
+  .work-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 24px;
+  }
+  .counter {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font: var(--type-caption);
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+  .counter-line {
+    width: 120px;
+    height: 1px;
+    background: var(--border-2);
+  }
+  .arrows {
+    display: flex;
+    gap: 8px;
+  }
+  .arrows button {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-2);
+    background: var(--surface-2);
+    border: 1px solid var(--border-2);
+    color: var(--text-secondary);
+    font-size: 16px;
+    cursor: pointer;
+    transition: all var(--duration-base) var(--ease-brand);
+  }
+  .arrows button:hover {
+    border-color: var(--border-hover);
+    color: var(--text-primary);
+  }
+
+  /* ---------- Process ---------- */
+  .process {
+    padding-top: 120px;
+    padding-bottom: 120px;
+  }
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+
+  /* ---------- Tech ---------- */
+  .tech {
+    background: var(--bg-secondary);
+    padding: 96px 0;
+  }
+  .tech-grid {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  /* ---------- Footer ---------- */
+  .footer-top {
+    padding-top: 120px;
+    padding-bottom: 96px;
+    display: grid;
+    grid-template-columns: 6fr 4fr 2fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .footer-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(36px, 5.6vw, 52px);
+    line-height: 1.19;
+    letter-spacing: var(--tracking-h1);
+  }
+  .footer-cta {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-self: end;
+    color: var(--text-primary);
+  }
+  .footer-brand span {
+    font: 500 22px/1 var(--font-sans);
+    letter-spacing: -0.02em;
+  }
+  .footer-mark {
+    height: 34px;
+    width: auto;
+  }
+  .footer-bar {
+    border-top: 1px solid var(--border-1);
+  }
+  .footer-bar-inner {
+    padding-top: 24px;
+    padding-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font: var(--type-caption);
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 960px) {
+    .work-inner {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .work-frame {
+      transform: none;
+      height: 320px;
+    }
+    .footer-top {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .footer-brand {
+      justify-self: start;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 40px;
+      padding-top: 40px;
+    }
+    .hero-visual {
+      width: 100%;
+      max-width: 520px;
+      height: auto;
+      aspect-ratio: 560 / 420;
+      align-self: center;
+    }
+    .about {
+      grid-template-columns: 1fr;
+    }
+    .about-photo {
+      min-height: 300px;
+    }
+    .about-copy {
+      padding: 56px var(--container-pad);
+      max-width: none;
+    }
+    .services-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .process-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+    }
+    .services,
+    .process {
+      padding-top: 88px;
+      padding-bottom: 88px;
+    }
+    .work {
+      padding: 88px 0;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .hero-sub {
+      max-width: none;
+    }
+    .tag {
+      display: none;
+    }
+    .logos {
+      gap: 32px 40px;
+    }
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
+    .process-grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .footer-top {
+      padding-top: 88px;
+      padding-bottom: 72px;
+    }
+    .footer-bar-inner {
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+</style>

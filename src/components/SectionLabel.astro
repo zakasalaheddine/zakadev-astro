@@ -1,0 +1,21 @@
+---
+/** Uppercase orange caption that opens every section ("WHAT I BUILD", "MY PROCESS"). */
+interface Props {
+  color?: string;
+  class?: string;
+}
+
+const { color = 'var(--orange)', class: className } = Astro.props;
+---
+
+<div class:list={['section-label', className]} style={`color:${color}`}>
+  <slot />
+</div>
+
+<style>
+  .section-label {
+    font: var(--type-caption);
+    letter-spacing: var(--tracking-caption);
+    text-transform: uppercase;
+  }
+</style>
