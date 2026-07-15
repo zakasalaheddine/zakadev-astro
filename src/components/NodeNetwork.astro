@@ -1,0 +1,207 @@
+---
+/**
+ * Hero node-network animation. A living constellation: nodes drift, nearby ones
+ * connect with faint lines, orange "signal" pulses travel along random edges, and
+ * the cursor gently attracts nearby nodes. Honors prefers-reduced-motion with a
+ * single static frame.
+ */
+---
+
+<canvas class="net" width="560" height="420" aria-hidden="true"></canvas>
+
+<style>
+  .net {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+</style>
+
+<script>
+  type Node = { x: number; y: number; vx: number; vy: number; r: number; orange: boolean };
+  type Pulse = { a: number; b: number; t: number; speed: number };
+
+  const c = document.querySelector('canvas.net') as HTMLCanvasElement | null;
+
+  if (c) {
+    const ctx = c.getContext('2d');
+    const W = (c.width = 560);
+    const H = (c.height = 420);
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const NODE_COUNT = 66;
+    const LINK_DIST = 116; // px within which two nodes connect
+    const MOUSE_RADIUS = 130;
+
+    const rand = (min: number, max: number) => min + Math.random() * (max - min);
+
+    const nodes: Node[] = [];
+    for (let i = 0; i < NODE_COUNT; i++) {
+      nodes.push({
+        x: rand(0, W),
+        y: rand(0, H),
+        vx: rand(-0.16, 0.16),
+        vy: rand(-0.16, 0.16),
+        r: rand(0.8, 1.9),
+        orange: Math.random() < 0.12,
+      });
+    }
+
+    const pulses: Pulse[] = [];
+    const MAX_PULSES = 5;
+
+    const mouse = { x: 0, y: 0, active: false };
+
+    if (!reduce) {
+      c.addEventListener('pointermove', (e) => {
+        const rect = c.getBoundingClientRect();
+        mouse.x = ((e.clientX - rect.left) / rect.width) * W;
+        mouse.y = ((e.clientY - rect.top) / rect.height) * H;
+        mouse.active = true;
+      });
+      c.addEventListener('pointerleave', () => {
+        mouse.active = false;
+      });
+    }
+
+    // Spawn a pulse on a currently-connected pair of nodes.
+    let lastSpawn = 0;
+    const spawnPulse = (time: number) => {
+      if (pulses.length >= MAX_PULSES || time - lastSpawn < 850) return;
+      // Try a few random pairs to find one within link distance.
+      for (let attempt = 0; attempt < 12; attempt++) {
+        const a = (Math.random() * NODE_COUNT) | 0;
+        const b = (Math.random() * NODE_COUNT) | 0;
+        if (a === b) continue;
+        const dx = nodes[a].x - nodes[b].x;
+        const dy = nodes[a].y - nodes[b].y;
+        if (dx * dx + dy * dy < LINK_DIST * LINK_DIST) {
+          pulses.push({ a, b, t: 0, speed: rand(0.012, 0.02) });
+          lastSpawn = time;
+          return;
+        }
+      }
+    };
+
+    const step = () => {
+      for (const n of nodes) {
+        n.x += n.vx;
+        n.y += n.vy;
+
+        // Gentle cursor attraction.
+        if (mouse.active) {
+          const dx = mouse.x - n.x;
+          const dy = mouse.y - n.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < MOUSE_RADIUS * MOUSE_RADIUS && d2 > 1) {
+            const d = Math.sqrt(d2);
+            const pull = (1 - d / MOUSE_RADIUS) * 0.06;
+            n.vx += (dx / d) * pull;
+            n.vy += (dy / d) * pull;
+          }
+        }
+
+        // Soft bounce at the edges.
+        if (n.x < 0 || n.x > W) n.vx *= -1;
+        if (n.y < 0 || n.y > H) n.vy *= -1;
+        n.x = Math.max(0, Math.min(W, n.x));
+        n.y = Math.max(0, Math.min(H, n.y));
+
+        // Damping + drift floor so motion never fully dies or runs away.
+        n.vx *= 0.985;
+        n.vy *= 0.985;
+        const sp = Math.hypot(n.vx, n.vy);
+        if (sp < 0.05) {
+          n.vx += rand(-0.04, 0.04);
+          n.vy += rand(-0.04, 0.04);
+        } else if (sp > 0.9) {
+          n.vx *= 0.9;
+          n.vy *= 0.9;
+        }
+      }
+    };
+
+    const drawFrame = (time: number) => {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, W, H);
+
+      // Edges.
+      for (let i = 0; i < NODE_COUNT; i++) {
+        for (let j = i + 1; j < NODE_COUNT; j++) {
+          const a = nodes[i];
+          const b = nodes[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < LINK_DIST * LINK_DIST) {
+            const prox = 1 - Math.sqrt(d2) / LINK_DIST;
+            const linkOrange = a.orange || b.orange;
+            ctx.strokeStyle = linkOrange
+              ? 'rgba(252,163,17,' + prox * 0.28 + ')'
+              : 'rgba(255,255,255,' + prox * 0.14 + ')';
+            ctx.lineWidth = prox * 0.9;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Nodes.
+      for (const n of nodes) {
+        if (n.orange) {
+          ctx.fillStyle = 'rgba(252,163,17,0.9)';
+          ctx.shadowColor = 'rgba(252,163,17,0.6)';
+          ctx.shadowBlur = 8;
+        } else {
+          ctx.fillStyle = 'rgba(255,255,255,' + (0.28 + n.r * 0.14) + ')';
+          ctx.shadowBlur = 0;
+        }
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.shadowBlur = 0;
+
+      // Signal pulses travelling along edges.
+      for (let i = pulses.length - 1; i >= 0; i--) {
+        const p = pulses[i];
+        p.t += p.speed;
+        const a = nodes[p.a];
+        const b = nodes[p.b];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        // Drop the pulse if its endpoints have drifted apart or it finished.
+        if (p.t >= 1 || dx * dx + dy * dy > LINK_DIST * LINK_DIST * 1.6) {
+          pulses.splice(i, 1);
+          continue;
+        }
+        const x = a.x + (b.x - a.x) * p.t;
+        const y = a.y + (b.y - a.y) * p.t;
+        const fade = Math.sin(p.t * Math.PI); // bright in the middle
+        ctx.fillStyle = 'rgba(255,183,46,' + (0.5 + fade * 0.5) + ')';
+        ctx.shadowColor = 'rgba(252,163,17,0.9)';
+        ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.arc(x, y, 2.4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    };
+
+    if (reduce) {
+      // Static single frame — no motion, no pulses.
+      drawFrame(0);
+    } else {
+      const loop = (time: number) => {
+        step();
+        spawnPulse(time);
+        drawFrame(time);
+        requestAnimationFrame(loop);
+      };
+      requestAnimationFrame(loop);
+    }
+  }
+</script>

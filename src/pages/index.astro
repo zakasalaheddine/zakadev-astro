@@ -7,7 +7,7 @@ import FeatureCard from '../components/FeatureCard.astro';
 import ProcessStep from '../components/ProcessStep.astro';
 import TechTile from '../components/TechTile.astro';
 import ImageSlot from '../components/ImageSlot.astro';
-import Spiral from '../components/Spiral.astro';
+import NodeNetwork from '../components/NodeNetwork.astro';
 
 const svg = (paths: string) =>
   `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>`;
@@ -60,11 +60,11 @@ const tech = ['GPT', 'AI', 'N8N', 'MAKE', 'NOTION', 'DB', 'PG', 'STRIPE', 'VERCE
           real results.
         </p>
         <div>
-          <Button href="#contact">Book a strategy call</Button>
+          <Button href="#contact" arrow fillHover>Book a strategy call</Button>
         </div>
       </div>
       <div class="hero-visual">
-        <Spiral />
+        <NodeNetwork />
         <div class="tag tag-automate">Automate<span class="tag-line"></span></div>
         <div class="tag tag-optimize"><span class="tag-line"></span>Optimize</div>
         <div class="tag tag-scale">Scale</div>

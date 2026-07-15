@@ -9,72 +9,114 @@ const links = [
 ---
 
 <header class="nav">
-  <a class="brand" href="#top" aria-label="zakadev — home">
-    <img src="/assets/zakadev-white.svg" alt="" class="brand-mark" />
-    <span class="brand-name">zakadev</span>
-  </a>
+  <div class="cluster">
+    <!-- Logo pill -->
+    <a class="logo-pill" href="#top" aria-label="zakadev — home">
+      <img src="/assets/zakadev-white.svg" alt="" class="logo-mark" />
+      <span class="logo-name">zakadev</span>
+    </a>
 
-  <!-- CSS-only mobile menu toggle -->
-  <input type="checkbox" id="nav-toggle" class="nav-toggle" />
-  <label for="nav-toggle" class="burger" aria-label="Toggle navigation">
-    <span></span><span></span><span></span>
-  </label>
+    <!-- CSS-only mobile toggle -->
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+    <label for="nav-toggle" class="burger" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </label>
 
-  <nav class="links">
-    {links.map((l) => <a href={l.href}>{l.label}</a>)}
-  </nav>
-
-  <a href="#contact" class="book">
-    Book a Call
-    <span class="book-dot" aria-hidden="true"></span>
-  </a>
+    <!-- Links pill -->
+    <nav class="links-pill">
+      {links.map((l) => <a class="link" href={l.href}>{l.label}</a>)}
+      <span class="divider" aria-hidden="true"></span>
+      <a class="book" href="#contact">
+        Book a Call
+        <span class="book-dot" aria-hidden="true"></span>
+      </a>
+    </nav>
+  </div>
 </header>
 
 <style>
   .nav {
     position: relative;
-    max-width: var(--container-max);
-    margin: 0 auto;
-    padding: 0 var(--container-pad);
-    height: 88px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
+    justify-content: center;
+    padding: 20px var(--container-pad) 0;
   }
 
-  .brand {
+  .cluster {
     display: flex;
     align-items: center;
+    gap: 12px;
+  }
+
+  /* Shared pill surface */
+  .logo-pill,
+  .links-pill {
+    background: var(--surface-2);
+    border: 1px solid var(--border-1);
+    border-radius: 999px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    transition: border-color var(--duration-base) var(--ease-brand);
+  }
+  .logo-pill:hover,
+  .links-pill:hover {
+    border-color: var(--border-2);
+  }
+
+  .logo-pill {
     gap: 10px;
+    padding: 0 20px 0 16px;
     color: var(--text-primary);
+    flex: none;
   }
-
-  .brand-mark {
-    height: 28px;
+  .logo-mark {
+    height: 24px;
     width: auto;
   }
-
-  .brand-name {
-    font: 500 20px/1 var(--font-sans);
+  .logo-name {
+    font: 500 18px/1 var(--font-sans);
     letter-spacing: -0.02em;
   }
 
-  .links {
-    display: flex;
-    gap: 36px;
+  .links-pill {
+    gap: 28px;
+    padding: 0 12px 0 28px;
+  }
+  .link {
     font: var(--type-small);
+    color: var(--text-secondary);
+  }
+  .link:hover {
+    color: var(--text-primary);
+  }
+
+  .divider {
+    width: 1px;
+    height: 20px;
+    background: var(--border-2);
+    flex: none;
   }
 
   .book {
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 999px;
+    background: var(--surface-3);
+    border: 1px solid var(--border-2);
     color: var(--text-primary);
     font: 500 14px/1 var(--font-sans);
     white-space: nowrap;
+    transition: all var(--duration-base) var(--ease-brand);
   }
-
+  .book:hover {
+    border-color: rgba(252, 163, 17, 0.6);
+    box-shadow: var(--glow-accent);
+    color: var(--text-primary);
+  }
   .book-dot {
     width: 6px;
     height: 6px;
@@ -83,7 +125,7 @@ const links = [
     flex: none;
   }
 
-  /* Mobile menu machinery — hidden on desktop */
+  /* Mobile machinery — hidden on desktop */
   .nav-toggle,
   .burger {
     display: none;
@@ -95,13 +137,15 @@ const links = [
       flex-direction: column;
       justify-content: center;
       gap: 5px;
-      width: 40px;
-      height: 40px;
-      padding: 8px;
+      width: 52px;
+      height: 52px;
+      padding: 15px;
+      background: var(--surface-2);
+      border: 1px solid var(--border-1);
+      border-radius: 999px;
       cursor: pointer;
-      order: 3;
+      flex: none;
     }
-
     .burger span {
       height: 2px;
       width: 100%;
@@ -110,7 +154,6 @@ const links = [
       transition: transform var(--duration-base) var(--ease-brand),
         opacity var(--duration-base) var(--ease-brand);
     }
-
     .nav-toggle:checked ~ .burger span:nth-child(1) {
       transform: translateY(7px) rotate(45deg);
     }
@@ -121,17 +164,18 @@ const links = [
       transform: translateY(-7px) rotate(-45deg);
     }
 
-    .links {
+    .links-pill {
       position: absolute;
-      top: 88px;
-      left: 0;
-      right: 0;
+      top: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(320px, calc(100vw - 44px));
+      height: auto;
       flex-direction: column;
-      gap: 4px;
-      padding: 12px var(--container-pad) 20px;
-      background: var(--bg-secondary);
-      border-top: 1px solid var(--border-1);
-      border-bottom: 1px solid var(--border-1);
+      align-items: stretch;
+      gap: 2px;
+      padding: 10px 20px;
+      border-radius: var(--radius-5);
       max-height: 0;
       overflow: hidden;
       opacity: 0;
@@ -140,20 +184,24 @@ const links = [
         opacity var(--duration-base) var(--ease-brand);
       z-index: 20;
     }
-
-    .links a {
-      padding: 12px 0;
-      font-size: 16px;
-    }
-
-    .nav-toggle:checked ~ .links {
-      max-height: 360px;
+    .nav-toggle:checked ~ .links-pill {
+      max-height: 400px;
       opacity: 1;
       pointer-events: auto;
     }
-
+    .link {
+      padding: 12px 0;
+      font-size: 16px;
+    }
+    .divider {
+      width: 100%;
+      height: 1px;
+      margin: 6px 0;
+    }
     .book {
-      display: none;
+      height: 44px;
+      justify-content: center;
+      margin-top: 4px;
     }
   }
 </style>

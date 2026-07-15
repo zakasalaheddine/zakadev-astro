@@ -1,21 +1,34 @@
 ---
 /**
  * zakadev button. Primary = white label + orange dot; secondary = plain outline.
- * Never orange-filled (per the design system).
+ * Never orange-filled at rest (per the design system).
+ *
+ * Opt-in props:
+ *  - arrow: render a trailing orange arrow (instead of the dot) that nudges right on hover.
+ *  - fillHover: on hover, fill orange with dark text (used for the hero CTA).
  */
 interface Props {
   href?: string;
   variant?: 'primary' | 'secondary';
+  arrow?: boolean;
+  fillHover?: boolean;
   class?: string;
 }
 
-const { href, variant = 'primary', class: className } = Astro.props;
+const { href, variant = 'primary', arrow = false, fillHover = false, class: className } =
+  Astro.props;
 const Tag = href ? 'a' : 'button';
 ---
 
-<Tag class:list={['btn', className]} href={href}>
+<Tag class:list={['btn', fillHover && 'btn--fill', className]} href={href}>
   <slot />
-  {variant === 'primary' && <span class="dot" aria-hidden="true"></span>}
+  {
+    arrow ? (
+      <span class="arrow" aria-hidden="true">&rarr;</span>
+    ) : (
+      variant === 'primary' && <span class="dot" aria-hidden="true" />
+    )
+  }
 </Tag>
 
 <style>
@@ -48,5 +61,30 @@ const Tag = href ? 'a' : 'button';
     border-radius: 50%;
     background: var(--orange);
     flex: none;
+  }
+
+  .arrow {
+    display: inline-block;
+    color: var(--orange);
+    font-size: 16px;
+    line-height: 1;
+    transition: transform var(--duration-base) var(--ease-brand),
+      color var(--duration-base) var(--ease-brand);
+  }
+
+  .btn:hover .arrow {
+    transform: translateX(3px);
+  }
+
+  /* Fill-on-hover variant — solid orange, dark label. */
+  .btn--fill:hover {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: #050505;
+    box-shadow: none;
+  }
+
+  .btn--fill:hover .arrow {
+    color: #050505;
   }
 </style>
