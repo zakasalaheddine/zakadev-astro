@@ -1,0 +1,84 @@
+---
+/** Featured-project card: optional tag, title, description, arrow link. */
+interface Props {
+  name: string;
+  description: string;
+  href?: string;
+  meta?: string;
+  linkLabel?: string;
+}
+
+const { name, description, href = '#', meta, linkLabel = 'View project' } = Astro.props;
+---
+
+<a class="pcard" href={href}>
+  {meta && <span class="pcard-tag">{meta}</span>}
+  <h3 class="pcard-title">{name}</h3>
+  <p class="pcard-desc">{description}</p>
+  <span class="pcard-link">
+    {linkLabel}
+    <span class="pcard-arrow" aria-hidden="true">&rarr;</span>
+  </span>
+</a>
+
+<style>
+  .pcard {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-4);
+    padding: 32px;
+    color: inherit;
+    text-decoration: none;
+    transition: all var(--duration-base) var(--ease-brand);
+  }
+
+  .pcard:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    color: inherit;
+  }
+
+  .pcard-tag {
+    align-self: flex-start;
+    font: var(--type-caption);
+    letter-spacing: var(--tracking-caption);
+    text-transform: uppercase;
+    color: var(--orange);
+    border: 1px solid var(--border-2);
+    border-radius: 999px;
+    padding: 4px 11px;
+  }
+
+  .pcard-title {
+    font: var(--type-h4);
+    color: var(--text-primary);
+  }
+
+  .pcard-desc {
+    font: var(--type-small);
+    color: var(--text-secondary);
+    flex: 1;
+  }
+
+  .pcard-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font: 500 14px/1 var(--font-sans);
+    color: var(--text-primary);
+  }
+
+  .pcard-arrow {
+    display: inline-block;
+    color: var(--orange);
+    transition: transform var(--duration-base) var(--ease-brand);
+  }
+
+  .pcard:hover .pcard-arrow {
+    transform: translateX(3px);
+  }
+</style>

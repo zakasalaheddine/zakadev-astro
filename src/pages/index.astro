@@ -3,44 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Button from '../components/Button.astro';
 import SectionLabel from '../components/SectionLabel.astro';
-import FeatureCard from '../components/FeatureCard.astro';
-import ProcessStep from '../components/ProcessStep.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import OfferingRow from '../components/OfferingRow.astro';
+import PostRow from '../components/PostRow.astro';
+import FaqItem from '../components/FaqItem.astro';
 import TechTile from '../components/TechTile.astro';
 import ImageSlot from '../components/ImageSlot.astro';
 import NodeNetwork from '../components/NodeNetwork.astro';
-
-const svg = (paths: string) =>
-  `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>`;
-
-const services = [
-  {
-    icon: svg('<path d="M12 2l3 5 5 1-4 4 1 6-5-3-5 3 1-6-4-4 5-1z"/>'),
-    title: 'AI Sales Systems',
-    description: 'From lead capture to closed deals. Automated.',
-  },
-  {
-    icon: svg('<path d="M12 19l7-14-16 7 6 2z"/><path d="M9 14l3 5"/>'),
-    title: 'AI Marketing Systems',
-    description: 'Content, ads, SEO and social — on autopilot.',
-  },
-  {
-    icon: svg('<path d="M12 3l7.8 4.5v9L12 21l-7.8-4.5v-9z"/><circle cx="12" cy="12" r="3"/>'),
-    title: 'AI Operations Systems',
-    description: 'Streamline internal workflows and team productivity.',
-  },
-  {
-    icon: svg('<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l2.6 12h11L21 8H6"/>'),
-    title: 'AI Commerce Systems',
-    description: 'Personalized experiences that convert and scale.',
-  },
-];
-
-const steps = [
-  { number: '01', title: 'Discover', description: 'Find repetitive work.', showLine: true },
-  { number: '02', title: 'Architect', description: 'Design the right automation.', showLine: true },
-  { number: '03', title: 'Build', description: 'Integrate AI with your existing tools.', showLine: true },
-  { number: '04', title: 'Launch', description: 'Monitor, optimize, and scale.', showLine: false },
-];
+import { stats, projects, offerings, posts, writingIndexHref, faqs } from '../data/site';
 
 const tech = ['GPT', 'AI', 'N8N', 'MAKE', 'NOTION', 'DB', 'PG', 'STRIPE', 'VERCEL', 'LINEAR', 'G', 'SLACK'];
 ---
@@ -71,18 +41,94 @@ const tech = ['GPT', 'AI', 'N8N', 'MAKE', 'NOTION', 'DB', 'PG', 'STRIPE', 'VERCE
       </div>
     </section>
 
-    <!-- Trusted by -->
-    <section class="trusted">
-      <div class="trusted-label">
-        <SectionLabel color="var(--text-muted)">Trusted by founders</SectionLabel>
+    <!-- Stats -->
+    <section class="stats section-inner" aria-label="Key numbers">
+      <dl class="stats-grid">
+        {
+          stats.map((s) => (
+            <div class="stat">
+              <dt class="stat-value">{s.value}</dt>
+              <dd class="stat-label">{s.label}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <!-- Featured projects -->
+    <section id="work" class="projects section-inner">
+      <div class="lead">
+        <SectionLabel>Featured projects</SectionLabel>
       </div>
-      <div class="logos">
-        <span class="logo logo-elunoire">ELUNOIRE</span>
-        <span class="logo logo-lincx">LINCX</span>
-        <span class="logo logo-bizee">BIZEE</span>
-        <span class="logo logo-spark">SPARK REVENUE</span>
+      <div class="projects-grid">
+        {
+          projects.map((p) => (
+            <ProjectCard
+              name={p.name}
+              description={p.description}
+              href={p.href}
+              meta={p.meta}
+              linkLabel={p.linkLabel}
+            />
+          ))
+        }
       </div>
     </section>
+
+    <!-- Products & communities -->
+    <section id="products" class="offerings section-inner">
+      <div class="lead">
+        <SectionLabel>Products &amp; communities</SectionLabel>
+      </div>
+      <div class="offerings-list">
+        {
+          offerings.map((o) => (
+            <OfferingRow
+              name={o.name}
+              description={o.description}
+              href={o.href}
+              badge={o.badge}
+              linkLabel={o.linkLabel}
+            />
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Recent writing -->
+    {
+      posts.length > 0 && (
+        <section id="writing" class="writing section-inner">
+          <div class="lead">
+            <SectionLabel>Recent writing</SectionLabel>
+          </div>
+          <div class="writing-list">
+            {posts.map((p) => (
+              <PostRow title={p.title} href={p.href} category={p.category} date={p.date} />
+            ))}
+          </div>
+          <a href={writingIndexHref} class="text-link writing-all">
+            All writing <span class="accent">&rarr;</span>
+          </a>
+        </section>
+      )
+    }
+
+    <!-- FAQ -->
+    {
+      faqs.length > 0 && (
+        <section id="faq" class="faq-sec section-inner">
+          <div class="lead">
+            <SectionLabel>FAQ</SectionLabel>
+          </div>
+          <div class="faq-list">
+            {faqs.map((f) => (
+              <FaqItem question={f.question} answer={f.answer} />
+            ))}
+          </div>
+        </section>
+      )
+    }
 
     <!-- About -->
     <section id="about" class="about">
@@ -100,73 +146,6 @@ const tech = ['GPT', 'AI', 'N8N', 'MAKE', 'NOTION', 'DB', 'PG', 'STRIPE', 'VERCE
           operations, and customer experiences.
         </p>
         <a href="#about" class="text-link">More about me <span class="accent">&rarr;</span></a>
-      </div>
-    </section>
-
-    <!-- Services -->
-    <section id="services" class="services section-inner">
-      <div class="lead">
-        <SectionLabel>What I build</SectionLabel>
-      </div>
-      <div class="services-grid">
-        {
-          services.map((s) => (
-            <FeatureCard
-              icon={s.icon}
-              title={s.title}
-              description={s.description}
-              href="#work"
-            />
-          ))
-        }
-      </div>
-    </section>
-
-    <!-- Featured work -->
-    <section id="work" class="work">
-      <div class="work-inner section-inner">
-        <div class="work-copy">
-          <SectionLabel>Featured work</SectionLabel>
-          <h2 class="h2">AI Print-on-Demand Platform</h2>
-          <p class="body-sm">
-            End-to-end automation for a print-on-demand business. From image upload to
-            fulfillment — no manual work.
-          </p>
-          <a href="#work" class="text-link">
-            View case study <span class="dot" aria-hidden="true"></span>
-          </a>
-        </div>
-        <div class="work-media">
-          <div class="work-frame">
-            <ImageSlot placeholder="Drop a product dashboard screenshot" />
-          </div>
-          <div class="work-controls">
-            <div class="counter">01<span class="counter-line"></span>03</div>
-            <div class="arrows">
-              <button aria-label="Previous">&lsaquo;</button>
-              <button aria-label="Next">&rsaquo;</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Process -->
-    <section id="process" class="process section-inner">
-      <div class="lead lead-lg">
-        <SectionLabel>My process</SectionLabel>
-      </div>
-      <div class="process-grid">
-        {
-          steps.map((s) => (
-            <ProcessStep
-              number={s.number}
-              title={s.title}
-              description={s.description}
-              showLine={s.showLine}
-            />
-          ))
-        }
       </div>
     </section>
 
@@ -259,9 +238,6 @@ const tech = ['GPT', 'AI', 'N8N', 'MAKE', 'NOTION', 'DB', 'PG', 'STRIPE', 'VERCE
   .lead {
     margin-bottom: 32px;
   }
-  .lead-lg {
-    margin-bottom: 40px;
-  }
 
   /* ---------- Hero ---------- */
   .hero {
@@ -331,40 +307,40 @@ const tech = ['GPT', 'AI', 'N8N', 'MAKE', 'NOTION', 'DB', 'PG', 'STRIPE', 'VERCE
     left: 200px;
   }
 
-  /* ---------- Trusted ---------- */
-  .trusted {
-    max-width: var(--container-max);
-    margin: 0 auto;
-    padding: 0 var(--container-pad) 96px;
+  /* ---------- Stats ---------- */
+  .stats {
+    padding-top: 8px;
+    padding-bottom: 96px;
   }
-  .trusted-label {
-    margin-bottom: 28px;
+  .stats-grid {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--border-1);
   }
-  .logos {
+  .stat {
+    padding: 32px 32px 32px 0;
+    border-left: 1px solid var(--border-1);
+    padding-left: 32px;
     display: flex;
-    gap: 64px;
-    align-items: center;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .stat:first-child {
+    border-left: none;
+    padding-left: 0;
+  }
+  .stat-value {
+    font: 400 clamp(34px, 4vw, 44px) / 1 var(--font-serif);
+    letter-spacing: var(--tracking-h2);
+    color: var(--text-primary);
+  }
+  .stat-label {
+    margin: 0;
+    font: var(--type-caption);
+    letter-spacing: var(--tracking-caption);
+    text-transform: uppercase;
     color: var(--text-muted);
-    flex-wrap: wrap;
-  }
-  .logo {
-    opacity: 0.75;
-  }
-  .logo-elunoire {
-    font: 400 17px/1 var(--font-serif);
-    letter-spacing: 0.25em;
-  }
-  .logo-lincx {
-    font: 700 19px/1 var(--font-sans);
-    letter-spacing: 0.12em;
-  }
-  .logo-bizee {
-    font: 800 19px/1 var(--font-sans);
-    letter-spacing: 0.06em;
-  }
-  .logo-spark {
-    font: 700 15px/1 var(--font-serif);
-    letter-spacing: 0.04em;
   }
 
   /* ---------- About ---------- */
@@ -386,91 +362,47 @@ const tech = ['GPT', 'AI', 'N8N', 'MAKE', 'NOTION', 'DB', 'PG', 'STRIPE', 'VERCE
     max-width: 640px;
   }
 
-  /* ---------- Services ---------- */
-  .services {
+  /* ---------- Featured projects ---------- */
+  .projects {
     padding-top: 120px;
     padding-bottom: 120px;
   }
-  .services-grid {
+  .projects-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
   }
 
-  /* ---------- Featured work ---------- */
-  .work {
-    background: var(--bg-secondary);
-    padding: 120px 0;
-  }
-  .work-inner {
-    display: grid;
-    grid-template-columns: 5fr 7fr;
-    gap: 64px;
-    align-items: center;
-  }
-  .work-copy {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-  .work-frame {
-    height: 380px;
-    border-radius: var(--radius-4);
-    border: 1px solid var(--border-1);
-    box-shadow: var(--shadow-lg);
-    transform: perspective(1200px) rotateY(-6deg) rotateX(2deg);
-    overflow: hidden;
-    position: relative;
-  }
-  .work-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 24px;
-  }
-  .counter {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font: var(--type-caption);
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-  }
-  .counter-line {
-    width: 120px;
-    height: 1px;
-    background: var(--border-2);
-  }
-  .arrows {
-    display: flex;
-    gap: 8px;
-  }
-  .arrows button {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-2);
-    background: var(--surface-2);
-    border: 1px solid var(--border-2);
-    color: var(--text-secondary);
-    font-size: 16px;
-    cursor: pointer;
-    transition: all var(--duration-base) var(--ease-brand);
-  }
-  .arrows button:hover {
-    border-color: var(--border-hover);
-    color: var(--text-primary);
-  }
-
-  /* ---------- Process ---------- */
-  .process {
-    padding-top: 120px;
+  /* ---------- Products & communities ---------- */
+  .offerings {
+    padding-top: 40px;
     padding-bottom: 120px;
   }
-  .process-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 32px;
+  .offerings-list {
+    border-top: 1px solid var(--border-1);
   }
+
+  /* ---------- Recent writing ---------- */
+  .writing {
+    padding-top: 40px;
+    padding-bottom: 120px;
+  }
+  .writing-list {
+    border-top: 1px solid var(--border-1);
+  }
+  .writing-all {
+    margin-top: 32px;
+  }
+
+  /* ---------- FAQ ---------- */
+  .faq-sec {
+    padding-top: 40px;
+    padding-bottom: 120px;
+  }
+  .faq-list {
+    border-top: 1px solid var(--border-1);
+  }
+
 
   /* ---------- Tech ---------- */
   .tech {
@@ -535,14 +467,6 @@ const tech = ['GPT', 'AI', 'N8N', 'MAKE', 'NOTION', 'DB', 'PG', 'STRIPE', 'VERCE
 
   /* ---------- Responsive ---------- */
   @media (max-width: 960px) {
-    .work-inner {
-      grid-template-columns: 1fr;
-      gap: 40px;
-    }
-    .work-frame {
-      transform: none;
-      height: 320px;
-    }
     .footer-top {
       grid-template-columns: 1fr;
       gap: 32px;
@@ -576,20 +500,12 @@ const tech = ['GPT', 'AI', 'N8N', 'MAKE', 'NOTION', 'DB', 'PG', 'STRIPE', 'VERCE
       padding: 56px var(--container-pad);
       max-width: none;
     }
-    .services-grid {
-      grid-template-columns: repeat(2, 1fr);
+    .projects-grid {
+      grid-template-columns: 1fr;
     }
-    .process-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 40px;
-    }
-    .services,
-    .process {
+    .projects {
       padding-top: 88px;
       padding-bottom: 88px;
-    }
-    .work {
-      padding: 88px 0;
     }
   }
 
@@ -600,15 +516,21 @@ const tech = ['GPT', 'AI', 'N8N', 'MAKE', 'NOTION', 'DB', 'PG', 'STRIPE', 'VERCE
     .tag {
       display: none;
     }
-    .logos {
-      gap: 32px 40px;
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
-    .services-grid {
-      grid-template-columns: 1fr;
+    /* Re-draw dividers for a 2-col grid: reset all, then border 3rd/4th on top. */
+    .stat {
+      border-left: none;
+      padding-left: 0;
+      padding-right: 0;
     }
-    .process-grid {
-      grid-template-columns: 1fr;
-      gap: 32px;
+    .stat:nth-child(even) {
+      border-left: 1px solid var(--border-1);
+      padding-left: 24px;
+    }
+    .stat:nth-child(n + 3) {
+      border-top: 1px solid var(--border-1);
     }
     .footer-top {
       padding-top: 88px;
