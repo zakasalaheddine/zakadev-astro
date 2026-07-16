@@ -1,16 +1,23 @@
 ---
-/** Uppercase orange caption that opens every section ("WHAT I BUILD", "MY PROCESS"). */
+/**
+ * Uppercase orange caption that opens every section ("WHAT I BUILD", "MY PROCESS").
+ *
+ * Pass `as="h2"` where the caption is the section's actual title, so the caption
+ * carries the heading semantics it already carries visually. Sections that own a
+ * separate headline (About) leave it a plain div — that headline is the h2.
+ */
 interface Props {
+  as?: 'div' | 'h2' | 'h3';
   color?: string;
   class?: string;
 }
 
-const { color = 'var(--orange)', class: className } = Astro.props;
+const { as: Tag = 'div', color = 'var(--orange)', class: className } = Astro.props;
 ---
 
-<div class:list={['section-label', className]} style={`color:${color}`}>
+<Tag class:list={['section-label', className]} style={`color:${color}`}>
   <slot />
-</div>
+</Tag>
 
 <style>
   .section-label {

@@ -25,8 +25,20 @@
 
   if (c) {
     const ctx = c.getContext('2d');
-    const W = (c.width = 560);
-    const H = (c.height = 420);
+
+    // Logical drawing space. The backing store is scaled to the device pixel
+    // ratio so the constellation stays sharp on retina screens; all coordinates
+    // below stay in these 560x420 units.
+    const W = 560;
+    const H = 420;
+
+    const sizeCanvas = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      c.width = W * dpr;
+      c.height = H * dpr;
+      ctx?.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    sizeCanvas();
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -194,14 +206,48 @@
     if (reduce) {
       // Static single frame — no motion, no pulses.
       drawFrame(0);
+      window.addEventListener('resize', () => {
+        sizeCanvas();
+        drawFrame(0);
+      });
     } else {
+      let raf = 0;
       const loop = (time: number) => {
         step();
         spawnPulse(time);
         drawFrame(time);
-        requestAnimationFrame(loop);
+        raf = requestAnimationFrame(loop);
       };
-      requestAnimationFrame(loop);
+
+      // The hero is only ~one screen tall, and this loop is O(n^2) over 66 nodes
+      // every frame. Run it only while it is actually on screen and in front.
+      let onScreen = false;
+      const sync = () => {
+        const shouldRun = onScreen && !document.hidden;
+        if (shouldRun && !raf) raf = requestAnimationFrame(loop);
+        else if (!shouldRun && raf) {
+          cancelAnimationFrame(raf);
+          raf = 0;
+        }
+      };
+
+      new IntersectionObserver((entries) => {
+        onScreen = entries[0].isIntersecting;
+        sync();
+      }).observe(c);
+
+      document.addEventListener('visibilitychange', sync);
+
+      // Resizing resets the backing store, wiping both the transform and the
+      // pixels. While paused there is no loop to repaint them, so do it here.
+      window.addEventListener('resize', () => {
+        sizeCanvas();
+        if (!raf) drawFrame(0);
+      });
+
+      // Paint once up front: the observer resolves a beat later, and a blank
+      // hero in that gap is worse than a still one.
+      drawFrame(0);
     }
   }
 </script>

@@ -35,10 +35,15 @@ const { name, description, href = '#', badge, linkLabel = 'Learn more' } = Astro
     border-bottom: 1px solid var(--border-1);
     color: inherit;
     text-decoration: none;
-    transition: padding var(--duration-base) var(--ease-brand);
   }
-  .row:hover {
-    padding-left: 12px;
+
+  /* Nudge the content, not the box: transform stays off the layout path. */
+  .row-main,
+  .row-cta {
+    transition: transform var(--duration-base) var(--ease-brand);
+  }
+  .row:hover .row-main {
+    transform: translateX(8px);
   }
 
   .row-main {
@@ -65,7 +70,7 @@ const { name, description, href = '#', badge, linkLabel = 'Learn more' } = Astro
     letter-spacing: var(--tracking-caption);
     text-transform: uppercase;
     color: var(--orange);
-    border: 1px solid rgba(252, 163, 17, 0.35);
+    border: 1px solid var(--orange-a35);
     border-radius: 999px;
     padding: 4px 11px;
   }
@@ -100,8 +105,9 @@ const { name, description, href = '#', badge, linkLabel = 'Learn more' } = Astro
       align-items: flex-start;
       gap: 16px;
     }
-    .row:hover {
-      padding-left: 4px;
+    /* No hover on touch; keep the row still. */
+    .row:hover .row-main {
+      transform: none;
     }
   }
 </style>

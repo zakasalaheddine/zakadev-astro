@@ -29,10 +29,14 @@ const meta = [category, date].filter(Boolean).join(' · ');
     border-bottom: 1px solid var(--border-1);
     color: inherit;
     text-decoration: none;
-    transition: padding var(--duration-base) var(--ease-brand);
   }
-  .post:hover {
-    padding-left: 12px;
+
+  /* Nudge the content, not the box: transform stays off the layout path. */
+  .post-main {
+    transition: transform var(--duration-base) var(--ease-brand);
+  }
+  .post:hover .post-main {
+    transform: translateX(8px);
   }
 
   .post-main {
@@ -69,8 +73,9 @@ const meta = [category, date].filter(Boolean).join(' · ');
     .post {
       gap: 20px;
     }
-    .post:hover {
-      padding-left: 4px;
+    /* No hover on touch; keep the row still. */
+    .post:hover .post-main {
+      transform: none;
     }
   }
 </style>

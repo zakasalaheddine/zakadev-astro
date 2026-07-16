@@ -56,17 +56,18 @@ import { stats, projects, offerings, posts, writingIndexHref, faqs, tech } from 
     <!-- Featured projects -->
     <section id="work" class="projects section-inner">
       <div class="lead">
-        <SectionLabel>Featured projects</SectionLabel>
+        <SectionLabel as="h2">Featured projects</SectionLabel>
       </div>
       <div class="projects-grid">
         {
-          projects.map((p) => (
+          projects.map((p, i) => (
             <ProjectCard
               name={p.name}
               description={p.description}
               href={p.href}
               meta={p.meta}
               linkLabel={p.linkLabel}
+              wide={i === projects.length - 1 && projects.length % 2 === 1}
             />
           ))
         }
@@ -76,7 +77,7 @@ import { stats, projects, offerings, posts, writingIndexHref, faqs, tech } from 
     <!-- Products & communities -->
     <section id="products" class="offerings section-inner">
       <div class="lead">
-        <SectionLabel>Products &amp; communities</SectionLabel>
+        <SectionLabel as="h2">Products &amp; communities</SectionLabel>
       </div>
       <div class="offerings-list">
         {
@@ -98,7 +99,7 @@ import { stats, projects, offerings, posts, writingIndexHref, faqs, tech } from 
       posts.length > 0 && (
         <section id="writing" class="writing section-inner">
           <div class="lead">
-            <SectionLabel>Recent writing</SectionLabel>
+            <SectionLabel as="h2">Recent writing</SectionLabel>
           </div>
           <div class="writing-list">
             {posts.map((p) => (
@@ -117,7 +118,7 @@ import { stats, projects, offerings, posts, writingIndexHref, faqs, tech } from 
       faqs.length > 0 && (
         <section id="faq" class="faq-sec section-inner">
           <div class="lead">
-            <SectionLabel>FAQ</SectionLabel>
+            <SectionLabel as="h2">FAQ</SectionLabel>
           </div>
           <div class="faq-list">
             {faqs.map((f) => (
@@ -151,7 +152,7 @@ import { stats, projects, offerings, posts, writingIndexHref, faqs, tech } from 
     <section class="tech">
       <div class="section-inner">
         <div class="lead">
-          <SectionLabel color="var(--text-muted)">Tech stack</SectionLabel>
+          <SectionLabel as="h2" color="var(--text-muted)">Tech stack</SectionLabel>
         </div>
         <div class="tech-grid">
           {tech.map((t) => <TechTile slug={t.slug} label={t.label} size={64} />)}
@@ -369,10 +370,6 @@ import { stats, projects, offerings, posts, writingIndexHref, faqs, tech } from 
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 24px;
-  }
-  /* When the last project sits alone on a row, let it span full width. */
-  .projects-grid > :global(:last-child:nth-child(odd)) {
-    grid-column: 1 / -1;
   }
 
   /* ---------- Products & communities ---------- */

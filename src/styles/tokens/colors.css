@@ -1,32 +1,47 @@
+/*
+ * Palette — OKLCH, hue 70 (the brand orange).
+ *
+ * Every neutral carries a trace of that hue (chroma 0.005–0.010) rather than
+ * sitting at chroma 0. It reads as the same near-black, but the greys warm
+ * toward the accent instead of fighting it. Chroma tapers as lightness
+ * approaches either end, where colour at full strength goes muddy or garish.
+ */
 :root {
   /* Primary accent — orange */
-  --orange: #FCA311;
-  --orange-hover: #FFB52E;
-  --orange-light: #FFD28A;
-  --orange-dark: #C97E00;
+  --orange: oklch(78.6% 0.167 70);
+  --orange-hover: oklch(82.3% 0.161 76.6);
+  --orange-light: oklch(88.7% 0.103 78.6);
+  --orange-dark: oklch(65.7% 0.144 68.7);
+
+  /* Translucent accent, for borders and glows that used to hard-code the hex. */
+  --orange-a60: oklch(78.6% 0.167 70 / 0.6);
+  --orange-a35: oklch(78.6% 0.167 70 / 0.35);
+  --orange-a15: oklch(78.6% 0.167 70 / 0.15);
 
   /* Neutrals / backgrounds */
-  --bg-primary: #050505;
-  --bg-secondary: #0B0B0B;
-  --bg-tertiary: #111111;
-  --bg-card: #121212;
-  --bg-elevated: #181818;
+  --bg-primary: oklch(11.5% 0.005 70);
+  --bg-secondary: oklch(15% 0.006 70);
+  --bg-tertiary: oklch(17.8% 0.006 70);
+  --bg-card: oklch(18.2% 0.006 70);
+  --bg-elevated: oklch(20.9% 0.007 70);
 
   /* Surfaces */
-  --surface-1: #111111;
-  --surface-2: #151515;
-  --surface-3: #1B1B1B;
+  --surface-1: oklch(17.8% 0.006 70);
+  --surface-2: oklch(19.6% 0.007 70);
+  --surface-3: oklch(22.2% 0.007 70);
 
   /* Borders */
-  --border-1: #222222;
-  --border-2: #2B2B2B;
-  --border-hover: #3A3A3A;
+  --border-1: oklch(25.2% 0.008 70);
+  --border-2: oklch(28.9% 0.009 70);
+  --border-hover: oklch(34.9% 0.01 70);
 
-  /* Text */
-  --text-primary: #FFFFFF;
-  --text-secondary: #B8B8B8;
-  --text-muted: #777777;
-  --text-disabled: #4D4D4D;
+  /* Text. Primary stops short of pure white — a warm off-white reads as cleaner
+     against a warm black and takes the glare off large display type. Muted is
+     held at 63.5% so its 12px captions clear AA on --bg-secondary. */
+  --text-primary: oklch(97% 0.005 70);
+  --text-secondary: oklch(78.3% 0.008 70);
+  --text-muted: oklch(63.5% 0.01 70);
+  --text-disabled: oklch(42% 0.009 70);
 
   /* Semantic aliases */
   --accent: var(--orange);

@@ -16,14 +16,19 @@ const links = [
       <span class="logo-name">zakadev</span>
     </a>
 
-    <!-- CSS-only mobile toggle -->
-    <input type="checkbox" id="nav-toggle" class="nav-toggle" />
-    <label for="nav-toggle" class="burger" aria-label="Toggle navigation">
+    <!-- Mobile toggle. A real button so it is reachable and operable by keyboard. -->
+    <button
+      type="button"
+      class="burger"
+      aria-label="Menu"
+      aria-expanded="false"
+      aria-controls="nav-menu"
+    >
       <span></span><span></span><span></span>
-    </label>
+    </button>
 
     <!-- Links pill -->
-    <nav class="links-pill">
+    <nav class="links-pill" id="nav-menu">
       {links.map((l) => <a class="link" href={l.href}>{l.label}</a>)}
       <span class="divider" aria-hidden="true"></span>
       <a class="book" href="#contact">
@@ -113,7 +118,7 @@ const links = [
     transition: all var(--duration-base) var(--ease-brand);
   }
   .book:hover {
-    border-color: rgba(252, 163, 17, 0.6);
+    border-color: var(--orange-a60);
     box-shadow: var(--glow-accent);
     color: var(--text-primary);
   }
@@ -126,7 +131,6 @@ const links = [
   }
 
   /* Mobile machinery — hidden on desktop */
-  .nav-toggle,
   .burger {
     display: none;
   }
@@ -154,13 +158,13 @@ const links = [
       transition: transform var(--duration-base) var(--ease-brand),
         opacity var(--duration-base) var(--ease-brand);
     }
-    .nav-toggle:checked ~ .burger span:nth-child(1) {
+    .burger[aria-expanded='true'] span:nth-child(1) {
       transform: translateY(7px) rotate(45deg);
     }
-    .nav-toggle:checked ~ .burger span:nth-child(2) {
+    .burger[aria-expanded='true'] span:nth-child(2) {
       opacity: 0;
     }
-    .nav-toggle:checked ~ .burger span:nth-child(3) {
+    .burger[aria-expanded='true'] span:nth-child(3) {
       transform: translateY(-7px) rotate(-45deg);
     }
 
@@ -179,15 +183,20 @@ const links = [
       max-height: 0;
       overflow: hidden;
       opacity: 0;
-      pointer-events: none;
+      /* visibility (not just opacity) so closed links leave the tab order. */
+      visibility: hidden;
       transition: max-height var(--duration-slow) var(--ease-brand),
-        opacity var(--duration-base) var(--ease-brand);
+        opacity var(--duration-base) var(--ease-brand),
+        visibility 0s linear var(--duration-slow);
       z-index: 20;
     }
-    .nav-toggle:checked ~ .links-pill {
+    .nav.is-open .links-pill {
       max-height: 400px;
       opacity: 1;
-      pointer-events: auto;
+      visibility: visible;
+      transition: max-height var(--duration-slow) var(--ease-brand),
+        opacity var(--duration-base) var(--ease-brand),
+        visibility 0s;
     }
     .link {
       padding: 12px 0;
@@ -205,3 +214,37 @@ const links = [
     }
   }
 </style>
+
+<script>
+  const nav = document.querySelector('.nav');
+  const burger = nav?.querySelector('.burger') as HTMLButtonElement | null;
+  const menu = nav?.querySelector('.links-pill');
+
+  if (nav && burger && menu) {
+    const setOpen = (open: boolean) => {
+      nav.classList.toggle('is-open', open);
+      burger.setAttribute('aria-expanded', String(open));
+    };
+
+    burger.addEventListener('click', () => {
+      setOpen(burger.getAttribute('aria-expanded') !== 'true');
+    });
+
+    // Jumping to a section should dismiss the menu covering it.
+    menu.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) setOpen(false);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && burger.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        burger.focus();
+      }
+    });
+
+    // Leaving mobile width hides the burger; drop the open state with it.
+    window.matchMedia('(max-width: 860px)').addEventListener('change', (e) => {
+      if (!e.matches) setOpen(false);
+    });
+  }
+</script>

@@ -2,6 +2,9 @@
 /**
  * Intentional empty image slot. Mirrors the design's "drop a photo here" slots —
  * a styled placeholder, not a broken image. Pass `src`/`alt` to fill it later.
+ *
+ * The empty state is an authoring cue, not content, so it stays out of the
+ * accessibility tree; only a filled slot exposes an image with real alt text.
  */
 interface Props {
   placeholder?: string;
@@ -17,7 +20,7 @@ const { placeholder = '', src, alt = '', class: className } = Astro.props;
   src ? (
     <img class:list={['slot-img', className]} src={src} alt={alt} />
   ) : (
-    <div class:list={['slot', className]} role="img" aria-label={placeholder}>
+    <div class:list={['slot', className]} aria-hidden="true">
       <svg
         class="slot-icon"
         width="28"
