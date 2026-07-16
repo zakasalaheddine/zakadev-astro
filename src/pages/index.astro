@@ -367,8 +367,12 @@ import { stats, projects, offerings, posts, writingIndexHref, faqs, tech } from 
   }
   .projects-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 24px;
+  }
+  /* When the last project sits alone on a row, let it span full width. */
+  .projects-grid > :global(:last-child:nth-child(odd)) {
+    grid-column: 1 / -1;
   }
 
   /* ---------- Products & communities ---------- */
