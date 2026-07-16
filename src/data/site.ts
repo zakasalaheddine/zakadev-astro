@@ -181,3 +181,29 @@ export const faqs: Faq[] = [
       'Placeholder answer — tell people the exact next step, e.g. book a call or send a message.',
   },
 ];
+
+export interface Tech {
+  /** Icon key — must exist in techIcons (src/data/techIcons.ts). */
+  slug: string;
+  /** Accessible label / tooltip shown on hover. */
+  label: string;
+}
+
+/**
+ * Tech stack (order shown). Each slug maps to a brand icon in techIcons.ts.
+ * To add a tech: fetch its Simple Icons SVG into techIcons.ts, then add an entry here.
+ */
+export const tech: Tech[] = [
+  { slug: 'openai', label: 'OpenAI' },
+  { slug: 'anthropic', label: 'Claude' },
+  { slug: 'n8n', label: 'n8n' },
+  { slug: 'make', label: 'Make' },
+  { slug: 'notion', label: 'Notion' },
+  { slug: 'postgresql', label: 'PostgreSQL' },
+  { slug: 'supabase', label: 'Supabase' },
+  { slug: 'stripe', label: 'Stripe' },
+  { slug: 'vercel', label: 'Vercel' },
+  { slug: 'linear', label: 'Linear' },
+  { slug: 'google', label: 'Google' },
+  { slug: 'slack', label: 'Slack' },
+];

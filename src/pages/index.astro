@@ -10,9 +10,7 @@ import FaqItem from '../components/FaqItem.astro';
 import TechTile from '../components/TechTile.astro';
 import ImageSlot from '../components/ImageSlot.astro';
 import NodeNetwork from '../components/NodeNetwork.astro';
-import { stats, projects, offerings, posts, writingIndexHref, faqs } from '../data/site';
-
-const tech = ['GPT', 'AI', 'N8N', 'MAKE', 'NOTION', 'DB', 'PG', 'STRIPE', 'VERCEL', 'LINEAR', 'G', 'SLACK'];
+import { stats, projects, offerings, posts, writingIndexHref, faqs, tech } from '../data/site';
 ---
 
 <BaseLayout>
@@ -156,7 +154,7 @@ const tech = ['GPT', 'AI', 'N8N', 'MAKE', 'NOTION', 'DB', 'PG', 'STRIPE', 'VERCE
           <SectionLabel color="var(--text-muted)">Tech stack</SectionLabel>
         </div>
         <div class="tech-grid">
-          {tech.map((t) => <TechTile label={t} size={64} />)}
+          {tech.map((t) => <TechTile slug={t.slug} label={t.label} size={64} />)}
         </div>
       </div>
     </section>
