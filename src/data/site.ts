@@ -35,20 +35,14 @@ export interface Project {
 }
 
 /**
- * Featured projects grid.
- * Entries 2 and 3 are still PLACEHOLDERS — swap in real projects (name,
- * description, href, optional meta tag). A case-study href points at
- * /projects/<slug>, rendered from src/content/projects/<slug>.md.
+ * Filler cards for the featured-projects grid.
+ *
+ * Real projects are NOT listed here — they come from the `projects` content
+ * collection (src/content/projects/*.md) and are rendered first. These
+ * PLACEHOLDERS pad the grid until there are enough case studies; delete them
+ * one by one as real projects land.
  */
-export const projects: Project[] = [
-  {
-    name: 'Lincx Claude Marketplace',
-    description:
-      'Turned an internal ad-tech platform into something the whole team can query in plain language — expert-grade answers, auditable, in seconds.',
-    href: '/projects/lincx-marketplace',
-    meta: 'Client system',
-    linkLabel: 'Read case study',
-  },
+export const projectPlaceholders: Project[] = [
   {
     name: 'Project Two',
     description: 'One-line description of a system you built and the outcome it drives.',

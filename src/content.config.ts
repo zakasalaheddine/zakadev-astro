@@ -10,6 +10,8 @@ const projects = defineCollection({
     role: z.string(),
     stack: z.string(),
     year: z.number(),
+    /** Small tag on the homepage card, e.g. "Client system". */
+    meta: z.string().optional(),
   }),
 });
 

@@ -10,7 +10,30 @@ import FaqItem from '../components/FaqItem.astro';
 import TechTile from '../components/TechTile.astro';
 import ImageSlot from '../components/ImageSlot.astro';
 import NodeNetwork from '../components/NodeNetwork.astro';
-import { stats, projects, offerings, posts, writingIndexHref, faqs, tech } from '../data/site';
+import { getCollection } from 'astro:content';
+import {
+  stats,
+  projectPlaceholders,
+  offerings,
+  posts,
+  writingIndexHref,
+  faqs,
+  tech,
+} from '../data/site';
+
+/* Real case studies lead the grid; placeholders pad out the rest until there
+   are enough of them. Newest first. */
+const caseStudies = (await getCollection('projects'))
+  .sort((a, b) => b.data.year - a.data.year)
+  .map((entry) => ({
+    name: entry.data.title,
+    description: entry.data.subtitle,
+    href: `/projects/${entry.id}`,
+    meta: entry.data.meta,
+    linkLabel: 'Read case study',
+  }));
+
+const projects = [...caseStudies, ...projectPlaceholders];
 ---
 
 <BaseLayout>

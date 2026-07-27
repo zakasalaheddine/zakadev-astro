@@ -1,6 +1,9 @@
 ---
 title: Lincx Claude Marketplace
-subtitle: Turning an ad-tech platform into something a team can just ask questions to
+subtitle: >-
+  Turned an internal ad-tech platform into something the whole team can query in
+  plain language — expert-grade answers, auditable, in seconds.
+meta: Client system
 role: Design & build
 stack: Claude Code, Model Context Protocol (MCP), TypeScript
 year: 2026
