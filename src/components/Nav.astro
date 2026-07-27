@@ -1,17 +1,17 @@
 ---
 const links = [
-  { label: 'Work', href: '#work' },
-  { label: 'Products', href: '#products' },
-  { label: 'Writing', href: '#writing' },
-  { label: 'FAQ', href: '#faq' },
-  { label: 'About', href: '#about' },
+  { label: 'Work', href: '/#work' },
+  { label: 'Products', href: '/#products' },
+  { label: 'Writing', href: '/#writing' },
+  { label: 'FAQ', href: '/#faq' },
+  { label: 'About', href: '/#about' },
 ];
 ---
 
 <header class="nav">
   <div class="cluster">
     <!-- Logo pill -->
-    <a class="logo-pill" href="#top" aria-label="zakadev — home">
+    <a class="logo-pill" href="/#top" aria-label="zakadev — home">
       <img src="/assets/zakadev-white.svg" alt="" class="logo-mark" />
       <span class="logo-name">zakadev</span>
     </a>
@@ -31,7 +31,7 @@ const links = [
     <nav class="links-pill" id="nav-menu">
       {links.map((l) => <a class="link" href={l.href}>{l.label}</a>)}
       <span class="divider" aria-hidden="true"></span>
-      <a class="book" href="#contact">
+      <a class="book" href="/#contact">
         Book a Call
         <span class="book-dot" aria-hidden="true"></span>
       </a>

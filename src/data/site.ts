@@ -36,16 +36,18 @@ export interface Project {
 
 /**
  * Featured projects grid.
- * TODO: These are PLACEHOLDERS — swap in your real projects (name, description,
- * href, optional meta tag).
+ * Entries 2 and 3 are still PLACEHOLDERS — swap in real projects (name,
+ * description, href, optional meta tag). A case-study href points at
+ * /projects/<slug>, rendered from src/content/projects/<slug>.md.
  */
 export const projects: Project[] = [
   {
-    name: 'Project One',
-    description: 'One-line description of a system you built and the outcome it drives.',
-    href: '#',
+    name: 'Lincx Claude Marketplace',
+    description:
+      'Turned an internal ad-tech platform into something the whole team can query in plain language — expert-grade answers, auditable, in seconds.',
+    href: '/projects/lincx-marketplace',
     meta: 'Client system',
-    linkLabel: 'View project',
+    linkLabel: 'Read case study',
   },
   {
     name: 'Project Two',
