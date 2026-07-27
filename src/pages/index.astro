@@ -33,7 +33,9 @@ const caseStudies = (await getCollection('projects'))
     linkLabel: 'Read case study',
   }));
 
-const projects = [...caseStudies, ...projectPlaceholders];
+/* Hard cap of 3: the grid is a 2+1 layout and a fourth card breaks it. Real
+   case studies win the slots, so placeholders fall off first. */
+const projects = [...caseStudies, ...projectPlaceholders].slice(0, 3);
 ---
 
 <BaseLayout>
