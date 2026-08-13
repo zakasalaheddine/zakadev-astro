@@ -22,7 +22,7 @@ const icon = slug ? techIcons[slug] : undefined;
 >
   {
     icon ? (
-      <svg class="tile-icon" viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden="true">
+      <svg class="tile-icon" viewBox={icon.viewBox ?? '0 0 24 24'} width="26" height="26" fill="currentColor" aria-hidden="true">
         <path d={icon.path} />
       </svg>
     ) : (

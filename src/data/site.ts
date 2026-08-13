@@ -137,14 +137,14 @@ export interface Tech {
 /**
  * Tech stack (order shown). Each slug maps to a brand icon in techIcons.ts.
  * To add a tech: fetch its Simple Icons SVG into techIcons.ts, then add an entry here.
- * Trigger.dev and pgvector have no Simple Icons mark, so they run as text tiles.
+ * pgvector is a Postgres extension with no mark of its own, so it rides on the
+ * Postgres tile rather than sitting there as a text tile.
  */
 export const tech: Tech[] = [
   { slug: 'openai', label: 'OpenAI' },
   { slug: 'anthropic', label: 'Claude' },
-  { label: 'Trigger.dev' },
-  { slug: 'postgresql', label: 'PostgreSQL' },
-  { label: 'pgvector' },
+  { slug: 'triggerdotdev', label: 'Trigger.dev' },
+  { slug: 'postgresql', label: 'Postgres + pgvector' },
   { slug: 'supabase', label: 'Supabase' },
   { slug: 'n8n', label: 'n8n' },
   { slug: 'make', label: 'Make' },
