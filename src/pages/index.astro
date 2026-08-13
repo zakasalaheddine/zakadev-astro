@@ -8,34 +8,23 @@ import OfferingRow from '../components/OfferingRow.astro';
 import PostRow from '../components/PostRow.astro';
 import FaqItem from '../components/FaqItem.astro';
 import TechTile from '../components/TechTile.astro';
-import ImageSlot from '../components/ImageSlot.astro';
 import NodeNetwork from '../components/NodeNetwork.astro';
 import { getCollection } from 'astro:content';
-import {
-  stats,
-  projectPlaceholders,
-  offerings,
-  posts,
-  writingIndexHref,
-  faqs,
-  tech,
-} from '../data/site';
+import { stats, services, posts, writingIndexHref, faqs, tech } from '../data/site';
 
-/* Real case studies lead the grid; placeholders pad out the rest until there
-   are enough of them. Newest first. */
-const caseStudies = (await getCollection('projects'))
+/* Only real case studies go in the grid — no placeholder cards. Newest first,
+   capped at 3: the grid is a 2+1 layout and a fourth card breaks it. */
+const projects = (await getCollection('projects'))
   .sort((a, b) => b.data.year - a.data.year)
   .map((entry) => ({
     name: entry.data.title,
     description: entry.data.subtitle,
     href: `/projects/${entry.id}`,
     meta: entry.data.meta,
+    bucket: entry.data.bucket,
     linkLabel: 'Read case study',
-  }));
-
-/* Hard cap of 3: the grid is a 2+1 layout and a fourth card breaks it. Real
-   case studies win the slots, so placeholders fall off first. */
-const projects = [...caseStudies, ...projectPlaceholders].slice(0, 3);
+  }))
+  .slice(0, 3);
 ---
 
 <BaseLayout>
@@ -46,11 +35,13 @@ const projects = [...caseStudies, ...projectPlaceholders].slice(0, 3);
     <section class="hero">
       <div class="hero-copy">
         <h1 class="hero-title">
-          I build systems<br />that <span class="accent">grow</span><br />businesses.
+          I build AI systems<br />that make businesses<br /><span class="accent"
+            >money</span
+          >.
         </h1>
         <p class="hero-sub">
-          AI marketing systems architect for founders who want automation that drives
-          real results.
+          Three things: get you more customers, make each one worth more, cut the hours
+          your team burns on manual work.
         </p>
         <div>
           <Button href="#contact" arrow fillHover>Book a strategy call</Button>
@@ -58,9 +49,9 @@ const projects = [...caseStudies, ...projectPlaceholders].slice(0, 3);
       </div>
       <div class="hero-visual">
         <NodeNetwork />
-        <div class="tag tag-automate">Automate<span class="tag-line"></span></div>
-        <div class="tag tag-optimize"><span class="tag-line"></span>Optimize</div>
-        <div class="tag tag-scale">Scale</div>
+        <div class="tag tag-acquire">Acquire<span class="tag-line"></span></div>
+        <div class="tag tag-retain"><span class="tag-line"></span>Retain</div>
+        <div class="tag tag-automate">Automate</div>
       </div>
     </section>
 
@@ -91,6 +82,7 @@ const projects = [...caseStudies, ...projectPlaceholders].slice(0, 3);
               description={p.description}
               href={p.href}
               meta={p.meta}
+              bucket={p.bucket}
               linkLabel={p.linkLabel}
               wide={i === projects.length - 1 && projects.length % 2 === 1}
             />
@@ -99,20 +91,19 @@ const projects = [...caseStudies, ...projectPlaceholders].slice(0, 3);
       </div>
     </section>
 
-    <!-- Products & communities -->
-    <section id="products" class="offerings section-inner">
+    <!-- How I help -->
+    <section id="services" class="offerings section-inner">
       <div class="lead">
-        <SectionLabel as="h2">Products &amp; communities</SectionLabel>
+        <SectionLabel as="h2">How I help</SectionLabel>
       </div>
       <div class="offerings-list">
         {
-          offerings.map((o) => (
+          services.map((s) => (
             <OfferingRow
-              name={o.name}
-              description={o.description}
-              href={o.href}
-              badge={o.badge}
-              linkLabel={o.linkLabel}
+              name={s.name}
+              description={s.description}
+              href={s.href}
+              linkLabel={s.linkLabel}
             />
           ))
         }
@@ -156,20 +147,20 @@ const projects = [...caseStudies, ...projectPlaceholders].slice(0, 3);
 
     <!-- About -->
     <section id="about" class="about">
-      <div class="about-photo">
-        <ImageSlot placeholder="Drop a b&w architectural photo" />
-      </div>
       <div class="about-copy">
         <SectionLabel>About me</SectionLabel>
         <h2 class="h2">Engineer by background.<br />Builder by choice.</h2>
         <p class="body-sm">
-          I started as a software engineer building production applications.
+          I spent twelve years as a software engineer shipping production applications
+          — the kind where uptime, security and maintenance actually matter. Now I apply
+          that to AI.
         </p>
         <p class="body-sm">
-          Today I combine engineering and AI to design systems that automate marketing,
-          operations, and customer experiences.
+          The difference shows up in what I build: systems that know when they're
+          unsure, recover when an API fails, and can be audited when someone asks why
+          they did something. Based in Morocco, working with clients across Europe and
+          the US.
         </p>
-        <a href="#about" class="text-link">More about me <span class="accent">&rarr;</span></a>
       </div>
     </section>
 
@@ -318,15 +309,15 @@ const projects = [...caseStudies, ...projectPlaceholders].slice(0, 3);
     height: 1px;
     background: var(--border-hover);
   }
-  .tag-automate {
+  .tag-acquire {
     top: 24px;
     left: 120px;
   }
-  .tag-optimize {
+  .tag-retain {
     top: 170px;
     right: 0;
   }
-  .tag-scale {
+  .tag-automate {
     bottom: 10px;
     left: 200px;
   }
@@ -370,20 +361,18 @@ const projects = [...caseStudies, ...projectPlaceholders].slice(0, 3);
   /* ---------- About ---------- */
   .about {
     background: var(--bg-secondary);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: stretch;
-  }
-  .about-photo {
-    position: relative;
-    min-height: 440px;
   }
   .about-copy {
-    padding: 96px 80px;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 96px var(--container-pad);
     display: flex;
     flex-direction: column;
     gap: 24px;
-    max-width: 640px;
+  }
+  /* Full-width section, but the paragraphs keep a readable measure. */
+  .about-copy .body-sm {
+    max-width: 68ch;
   }
 
   /* ---------- Featured projects ---------- */
@@ -514,15 +503,8 @@ const projects = [...caseStudies, ...projectPlaceholders].slice(0, 3);
       aspect-ratio: 560 / 420;
       align-self: center;
     }
-    .about {
-      grid-template-columns: 1fr;
-    }
-    .about-photo {
-      min-height: 300px;
-    }
     .about-copy {
       padding: 56px var(--container-pad);
-      max-width: none;
     }
     .projects-grid {
       grid-template-columns: 1fr;
