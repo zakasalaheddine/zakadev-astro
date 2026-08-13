@@ -13,7 +13,13 @@ const { slug, label, size = 64 } = Astro.props;
 const icon = slug ? techIcons[slug] : undefined;
 ---
 
-<div class="tile" style={`width:${size}px;height:${size}px`} role="img" aria-label={label}>
+<!-- Text tiles size to their label; a fixed square clips anything past ~8 chars. -->
+<div
+  class:list={['tile', !icon && 'tile--text']}
+  style={`${icon ? 'width' : 'min-width'}:${size}px;height:${size}px`}
+  role="img"
+  aria-label={label}
+>
   {
     icon ? (
       <svg class="tile-icon" viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden="true">
@@ -47,8 +53,13 @@ const icon = slug ? techIcons[slug] : undefined;
     color: var(--text-primary);
   }
 
+  .tile--text {
+    padding: 0 14px;
+  }
+
   .tile-label {
     opacity: 0.7;
+    white-space: nowrap;
   }
   .tile:hover .tile-label {
     opacity: 1;

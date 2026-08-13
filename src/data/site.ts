@@ -82,7 +82,11 @@ export interface Post {
  */
 export const posts: Post[] = [];
 
-/** Link to the full blog index (used by the "All writing" CTA). */
+/**
+ * Link to the full blog index (used by the "All writing" CTA).
+ * Unreachable while `posts` is empty — set it to a real URL before adding posts,
+ * or the section comes back with a dead link.
+ */
 export const writingIndexHref = '#';
 
 export interface Faq {
