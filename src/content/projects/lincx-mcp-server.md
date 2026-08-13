@@ -5,6 +5,7 @@ role: Design & build
 stack: Claude Code, Model Context Protocol (MCP), TypeScript, OAuth 2.1, Redis
 year: 2026
 meta: Client system
+bucket: Cut costs
 ---
 
 ## The short version

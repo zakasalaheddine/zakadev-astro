@@ -11,6 +11,8 @@ interface Props {
   description: string;
   href?: string;
   meta?: string;
+  /** Outcome bucket, shown as a muted second tag. */
+  bucket?: string;
   linkLabel?: string;
   wide?: boolean;
 }
@@ -20,6 +22,7 @@ const {
   description,
   href = '#',
   meta,
+  bucket,
   linkLabel = 'View project',
   wide = false,
 } = Astro.props;
@@ -27,7 +30,10 @@ const {
 
 <a class:list={['pcard', wide && 'pcard--wide']} href={href}>
   <div class="pcard-head">
-    {meta && <span class="pcard-tag">{meta}</span>}
+    <div class="pcard-tags">
+      {meta && <span class="pcard-tag">{meta}</span>}
+      {bucket && <span class="pcard-tag pcard-tag--bucket">{bucket}</span>}
+    </div>
     <h3 class="pcard-title">{name}</h3>
   </div>
   <div class="pcard-body">
@@ -74,6 +80,12 @@ const {
     flex: 1;
   }
 
+  .pcard-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
   .pcard-tag {
     font: var(--type-caption);
     letter-spacing: var(--tracking-caption);
@@ -82,6 +94,11 @@ const {
     border: 1px solid var(--border-2);
     border-radius: 999px;
     padding: 4px 11px;
+  }
+
+  /* Secondary to the type tag: same shape, no accent colour. */
+  .pcard-tag--bucket {
+    color: var(--text-muted);
   }
 
   .pcard-title {

@@ -4,100 +4,61 @@
  */
 
 export interface Stat {
-  /** The headline number, e.g. "20+". */
+  /** The headline number, e.g. "12+". */
   value: string;
-  /** Short label under the number, e.g. "Systems deployed". */
+  /** Short label under the number, e.g. "Yrs engineering". */
   label: string;
 }
 
 /**
  * Hero stats row.
- * TODO: These are PLACEHOLDERS — replace the values/labels with real numbers.
+ * Every value here has to be checkable by a client — the Upwork profile backs
+ * the last three. Do not add a number nobody can verify.
  */
 export const stats: Stat[] = [
-  { value: '20+', label: 'Systems deployed' },
-  { value: '30+', label: 'Automations live' },
-  { value: '5+', label: 'Years building' },
-  { value: '10k+', label: 'Hours saved / year' },
+  { value: '12+', label: 'Yrs engineering' },
+  { value: '100%', label: 'Job success' },
+  { value: '$200K+', label: 'Delivered' },
+  /* Split across value/label: the full badge name on one 44px serif line
+     overflows the column. */
+  { value: 'Top Rated', label: 'Plus badge, Upwork' },
 ];
 
-export interface Project {
-  /** Project name / title. */
+export interface Service {
+  /** Outcome bucket, e.g. "Get more customers". */
   name: string;
-  /** One-line description of what it is and the outcome. */
-  description: string;
-  /** Where the card links to. */
-  href: string;
-  /** Optional small tag shown at the top, e.g. "Live", "Client system", "MIT". */
-  meta?: string;
-  /** Link label at the bottom of the card. */
-  linkLabel?: string;
-}
-
-/**
- * Filler cards for the featured-projects grid.
- *
- * Real projects are NOT listed here — they come from the `projects` content
- * collection (src/content/projects/*.md) and are rendered first. These
- * PLACEHOLDERS pad the grid until there are enough case studies; delete them
- * one by one as real projects land.
- */
-export const projectPlaceholders: Project[] = [
-  {
-    name: 'Project Two',
-    description: 'One-line description of a system you built and the outcome it drives.',
-    href: '#',
-    meta: 'Automation',
-    linkLabel: 'View project',
-  },
-  {
-    name: 'Project Three',
-    description: 'One-line description of a system you built and the outcome it drives.',
-    href: '#',
-    meta: 'Internal tool',
-    linkLabel: 'View project',
-  },
-];
-
-export interface Offering {
-  /** Product / community name. */
-  name: string;
-  /** One-line description. */
+  /** The concrete systems that deliver it. */
   description: string;
   /** Where it links to. */
   href: string;
-  /** Badge shown next to the name, e.g. "$XX" (price) or "Free". */
-  badge?: string;
-  /** CTA label, e.g. "Get it", "Join free". */
+  /** CTA label. */
   linkLabel?: string;
 }
 
 /**
- * Products & communities list.
- * TODO: PLACEHOLDERS — two paid digital products + one free community.
- * Set real names, descriptions, prices/badges, and hrefs.
+ * "How I help" — the three outcome buckets everything I build maps to.
+ * Every row goes to the contact CTA; these are conversations, not products.
  */
-export const offerings: Offering[] = [
+export const services: Service[] = [
   {
-    name: 'Digital Product One',
-    description: 'A short line about the digital product and what the buyer gets.',
-    href: '#',
-    badge: '$XX',
-    linkLabel: 'Get it',
+    name: 'Get more customers',
+    description:
+      'Lead qualification, automated follow-up, intake that never drops a lead.',
+    href: '#contact',
+    linkLabel: 'Talk it through',
   },
   {
-    name: 'Digital Product Two',
-    description: 'A short line about the digital product and what the buyer gets.',
-    href: '#',
-    badge: '$XX',
-    linkLabel: 'Get it',
+    name: 'Make customers worth more',
+    description: 'Onboarding that runs itself, CRM automation, lifecycle triggers.',
+    href: '#contact',
+    linkLabel: 'Talk it through',
   },
   {
-    name: 'Free Community',
-    description: 'Where you gather your audience and share what you build.',
-    href: '#',
-    badge: 'Free',
-    linkLabel: 'Join free',
+    name: 'Cut costs',
+    description:
+      'Internal knowledge assistants, automated reporting, ticket triage.',
+    href: '#contact',
+    linkLabel: 'Talk it through',
   },
 ];
 
@@ -113,30 +74,13 @@ export interface Post {
 }
 
 /**
- * Recent writing.
- * TODO: PLACEHOLDERS — replace with your real posts (title, href, optional
- * category/date). Empty the array to hide the section.
+ * Recent writing. Empty hides the whole section — better than fake posts.
+ * Add entries once the real articles exist. Queued, all from shipped work:
+ *   - Why I let the AI say "I don't know" (confidence gate + review queue)
+ *   - Let the AI do language, not math (the Marketplace rule)
+ *   - One doorway, many rooms: safe multi-client AI access
  */
-export const posts: Post[] = [
-  {
-    title: 'How I automated an entire marketing workflow with AI',
-    href: '#',
-    category: 'Automation',
-    date: 'Jul 2026',
-  },
-  {
-    title: 'The system I use to ship content on autopilot',
-    href: '#',
-    category: 'Systems',
-    date: 'Jun 2026',
-  },
-  {
-    title: 'Turning a manual process into a self-running engine',
-    href: '#',
-    category: 'Workflow',
-    date: 'May 2026',
-  },
-];
+export const posts: Post[] = [];
 
 /** Link to the full blog index (used by the "All writing" CTA). */
 export const writingIndexHref = '#';
@@ -146,41 +90,42 @@ export interface Faq {
   answer: string;
 }
 
-/**
- * Frequently asked questions.
- * TODO: PLACEHOLDERS — replace with your real questions and answers.
- */
 export const faqs: Faq[] = [
   {
     question: 'What do you build?',
     answer:
-      'Placeholder answer — describe the kinds of systems you build and the outcomes they drive for clients.',
+      'AI systems that do one of three things: bring in more customers, increase what each one is worth, or cut the hours your team spends on manual work. In practice that’s lead qualification and follow-up, onboarding and CRM automation, internal knowledge assistants, automated reporting, and connecting AI safely to internal tools.',
   },
   {
     question: 'How do you work with clients?',
     answer:
-      'Placeholder answer — outline your engagement process, from first call to delivery and handover.',
+      'It starts with an audit — I map how work actually moves through your business and rank what’s worth automating by hours saved and build cost. From there we scope one system with a measurable outcome, I build and deploy it, and you get the source code and documentation. Most clients then move to a monthly retainer so the system stays monitored, tuned and extended.',
   },
   {
     question: 'What does a project cost?',
     answer:
-      'Placeholder answer — explain your pricing model (fixed scope, retainer, etc.) and typical ranges.',
+      'Audits run $180–600. Most builds land between $900 and $4,500 depending on how many sources and integrations are involved. Ongoing support and iteration runs $1,500–2,500 a month. You’ll get a fixed price before any work starts — no hourly surprises.',
   },
   {
     question: 'Which tools and platforms do you use?',
     answer:
-      'Placeholder answer — mention the core stack you build on and how you integrate with existing tools.',
+      'TypeScript and Python for the systems themselves, Claude and OpenAI for the AI layer, Trigger.dev for durable workflows that survive failures and retries, Postgres with pgvector for grounded retrieval, and n8n or Make where a visual tool genuinely fits. I integrate with the tools you already pay for rather than replacing them.',
+  },
+  {
+    question: 'Is my data safe?',
+    answer:
+      'Credentials stay server-side and never reach the model. Access is scoped so a system can only reach the data it’s meant to. Everything can run on your own infrastructure if you need it to, and every decision the system makes is logged and auditable.',
   },
   {
     question: 'How do I get started?',
     answer:
-      'Placeholder answer — tell people the exact next step, e.g. book a call or send a message.',
+      'Book a call and bring one workflow that’s eating your team’s time. In 30 minutes you’ll know whether it’s worth automating, what it would take, and roughly what it would cost. You’ll get a written summary afterward either way.',
   },
 ];
 
 export interface Tech {
-  /** Icon key — must exist in techIcons (src/data/techIcons.ts). */
-  slug: string;
+  /** Icon key in techIcons (src/data/techIcons.ts). Omit to render the label as text. */
+  slug?: string;
   /** Accessible label / tooltip shown on hover. */
   label: string;
 }
@@ -188,18 +133,19 @@ export interface Tech {
 /**
  * Tech stack (order shown). Each slug maps to a brand icon in techIcons.ts.
  * To add a tech: fetch its Simple Icons SVG into techIcons.ts, then add an entry here.
+ * Trigger.dev and pgvector have no Simple Icons mark, so they run as text tiles.
  */
 export const tech: Tech[] = [
   { slug: 'openai', label: 'OpenAI' },
   { slug: 'anthropic', label: 'Claude' },
+  { label: 'Trigger.dev' },
+  { slug: 'postgresql', label: 'PostgreSQL' },
+  { label: 'pgvector' },
+  { slug: 'supabase', label: 'Supabase' },
   { slug: 'n8n', label: 'n8n' },
   { slug: 'make', label: 'Make' },
-  { slug: 'notion', label: 'Notion' },
-  { slug: 'postgresql', label: 'PostgreSQL' },
-  { slug: 'supabase', label: 'Supabase' },
   { slug: 'stripe', label: 'Stripe' },
   { slug: 'vercel', label: 'Vercel' },
   { slug: 'linear', label: 'Linear' },
-  { slug: 'google', label: 'Google' },
   { slug: 'slack', label: 'Slack' },
 ];
