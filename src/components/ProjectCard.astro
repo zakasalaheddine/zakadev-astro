@@ -13,6 +13,8 @@ interface Props {
   meta?: string;
   /** Outcome bucket, shown as a muted second tag. */
   bucket?: string;
+  /** What it was built with. Evidence for the reader who came to vet capability. */
+  stack?: string;
   linkLabel?: string;
   wide?: boolean;
 }
@@ -23,6 +25,7 @@ const {
   href = '#',
   meta,
   bucket,
+  stack,
   linkLabel = 'View project',
   wide = false,
 } = Astro.props;
@@ -38,6 +41,7 @@ const {
   </div>
   <div class="pcard-body">
     <p class="pcard-desc">{description}</p>
+    {stack && <p class="pcard-stack">{stack}</p>}
     <span class="pcard-link">
       {linkLabel}
       <span class="pcard-arrow" aria-hidden="true">&rarr;</span>
@@ -113,6 +117,17 @@ const {
     font: var(--type-small);
     color: var(--text-secondary);
     flex: 1;
+  }
+
+  /* Sits between the description and the link, above a hairline, so the card
+     reads as claim then evidence then invitation. */
+  .pcard-stack {
+    font: var(--type-caption);
+    line-height: 1.6;
+    color: var(--text-muted);
+    padding-top: 16px;
+    border-top: 1px solid var(--border-1);
+    align-self: stretch;
   }
 
   .pcard-link {

@@ -1,6 +1,8 @@
 ---
 title: Lincx MCP Server
-subtitle: The secure bridge that lets a whole team talk to an ad-tech platform through Claude
+subtitle: >-
+  The secure doorway behind it: one login, scoped to the right client, every
+  answer read from the real platform.
 role: Design & build
 stack: Claude Code, Model Context Protocol (MCP), TypeScript, OAuth 2.1, Redis
 year: 2026

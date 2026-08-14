@@ -6,22 +6,22 @@
 export interface Stat {
   /** The headline number, e.g. "12+". */
   value: string;
-  /** Short label under the number, e.g. "Yrs engineering". */
+  /** Short label under the number, e.g. "Years engineering". */
   label: string;
+  /** Set for word values: they need a smaller size to hold one line. */
+  words?: boolean;
 }
 
 /**
  * Hero stats row.
- * Every value here has to be checkable by a client — the Upwork profile backs
+ * Every value here has to be checkable by a client. The Upwork profile backs
  * the last three. Do not add a number nobody can verify.
  */
 export const stats: Stat[] = [
-  { value: '12+', label: 'Yrs engineering' },
+  { value: '12+', label: 'Years engineering' },
   { value: '100%', label: 'Job success' },
-  { value: '$200K+', label: 'Delivered' },
-  /* Split across value/label: the full badge name on one 44px serif line
-     overflows the column. */
-  { value: 'Top Rated', label: 'Plus badge, Upwork' },
+  { value: '$200K+', label: 'Client billings' },
+  { value: 'Top Rated Plus', label: 'Upwork status', words: true },
 ];
 
 export interface Service {
@@ -42,23 +42,21 @@ export interface Service {
 export const services: Service[] = [
   {
     name: 'Get more customers',
-    description:
-      'Lead qualification, automated follow-up, intake that never drops a lead.',
+    description: 'Lead qualification, follow-up that never forgets, intake that drops nothing.',
     href: '#contact',
-    linkLabel: 'Talk it through',
+    linkLabel: 'Book a call',
   },
   {
     name: 'Make customers worth more',
     description: 'Onboarding that runs itself, CRM automation, lifecycle triggers.',
     href: '#contact',
-    linkLabel: 'Talk it through',
+    linkLabel: 'Book a call',
   },
   {
     name: 'Cut costs',
-    description:
-      'Internal knowledge assistants, automated reporting, ticket triage.',
+    description: 'Internal knowledge assistants, automated reporting, ticket triage.',
     href: '#contact',
-    linkLabel: 'Talk it through',
+    linkLabel: 'Book a call',
   },
 ];
 
@@ -98,32 +96,32 @@ export const faqs: Faq[] = [
   {
     question: 'What do you build?',
     answer:
-      'AI systems that do one of three things: bring in more customers, increase what each one is worth, or cut the hours your team spends on manual work. In practice that’s lead qualification and follow-up, onboarding and CRM automation, internal knowledge assistants, automated reporting, and connecting AI safely to internal tools.',
+      'AI systems that do one of three things: bring in more customers, raise what each one is worth, or cut the hours your team spends on manual work. In practice that means lead qualification and follow-up, onboarding and CRM automation, internal knowledge assistants, automated reporting, and safe connections between AI and the tools you already run.',
   },
   {
     question: 'How do you work with clients?',
     answer:
-      'It starts with an audit — I map how work actually moves through your business and rank what’s worth automating by hours saved and build cost. From there we scope one system with a measurable outcome, I build and deploy it, and you get the source code and documentation. Most clients then move to a monthly retainer so the system stays monitored, tuned and extended.',
+      'It starts with an audit. I map how work actually moves through your business, then rank what is worth automating by hours saved against build cost. We scope one system with a measurable outcome, I build and deploy it, and you get the source code and the documentation. Most clients move to a monthly retainer after that, so the system stays monitored, tuned and extended.',
   },
   {
     question: 'What does a project cost?',
     answer:
-      'Audits run $180–600. Most builds land between $900 and $4,500 depending on how many sources and integrations are involved. Ongoing support and iteration runs $1,500–2,500 a month. You’ll get a fixed price before any work starts — no hourly surprises.',
+      'Audits run $180 to $600. Most builds land between $900 and $4,500, depending on how many sources and integrations are involved. Ongoing support and iteration runs $1,500 to $2,500 a month. You get a fixed price before any work starts, so there are no hourly surprises.',
   },
   {
     question: 'Which tools and platforms do you use?',
     answer:
-      'TypeScript and Python for the systems themselves, Claude and OpenAI for the AI layer, Trigger.dev for durable workflows that survive failures and retries, Postgres with pgvector for grounded retrieval, and n8n or Make where a visual tool genuinely fits. I integrate with the tools you already pay for rather than replacing them.',
+      'TypeScript and Python for the systems themselves. Claude and OpenAI for the AI layer. Trigger.dev for durable workflows that survive failures and retries. Postgres with pgvector for grounded retrieval. n8n or Make where a visual tool genuinely fits. I integrate with the tools you already pay for rather than replacing them.',
   },
   {
     question: 'Is my data safe?',
     answer:
-      'Credentials stay server-side and never reach the model. Access is scoped so a system can only reach the data it’s meant to. Everything can run on your own infrastructure if you need it to, and every decision the system makes is logged and auditable.',
+      'Credentials stay server-side and never reach the model. Access is scoped, so a system can only read the data it is meant to. Everything can run on your own infrastructure, and every decision the system makes is logged and auditable.',
   },
   {
     question: 'How do I get started?',
     answer:
-      'Book a call and bring one workflow that’s eating your team’s time. In 30 minutes you’ll know whether it’s worth automating, what it would take, and roughly what it would cost. You’ll get a written summary afterward either way.',
+      'Book a call and bring one workflow that is eating your team’s time. In 30 minutes you will know whether it is worth automating, what it would take, and roughly what it would cost. You get a written summary either way.',
   },
 ];
 

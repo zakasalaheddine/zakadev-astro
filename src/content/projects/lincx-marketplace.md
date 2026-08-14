@@ -1,8 +1,8 @@
 ---
 title: Lincx Claude Marketplace
 subtitle: >-
-  Turned an internal ad-tech platform into something the whole team can query in
-  plain language — expert-grade answers, auditable, in seconds.
+  A whole team can now ask an ad platform questions in plain language and get
+  auditable, expert-grade answers in seconds.
 meta: Client system
 bucket: Cut costs
 role: Design & build

@@ -22,6 +22,7 @@ const projects = (await getCollection('projects'))
     href: `/projects/${entry.id}`,
     meta: entry.data.meta,
     bucket: entry.data.bucket,
+    stack: entry.data.stack,
     linkLabel: 'Read case study',
   }))
   .slice(0, 3);
@@ -35,16 +36,13 @@ const projects = (await getCollection('projects'))
     <section class="hero">
       <div class="hero-copy">
         <h1 class="hero-title">
-          I build AI systems<br />that make businesses<br /><span class="accent"
-            >money</span
-          >.
+          I build AI systems that make businesses <span class="accent">money</span>.
         </h1>
         <p class="hero-sub">
-          Three things: get you more customers, make each one worth more, cut the hours
-          your team burns on manual work.
+          More customers. More revenue from each one. Fewer hours lost to manual work.
         </p>
         <div>
-          <Button href="#contact" arrow fillHover>Book a strategy call</Button>
+          <Button href="#contact" arrow fillHover>Book a call</Button>
         </div>
       </div>
       <div class="hero-visual">
@@ -61,7 +59,7 @@ const projects = (await getCollection('projects'))
         {
           stats.map((s) => (
             <div class="stat">
-              <dt class="stat-value">{s.value}</dt>
+              <dt class:list={['stat-value', s.words && 'stat-value--words']}>{s.value}</dt>
               <dd class="stat-label">{s.label}</dd>
             </div>
           ))
@@ -69,10 +67,10 @@ const projects = (await getCollection('projects'))
       </dl>
     </section>
 
-    <!-- Featured projects -->
+    <!-- Selected work -->
     <section id="work" class="projects section-inner">
       <div class="lead">
-        <SectionLabel as="h2">Featured projects</SectionLabel>
+        <SectionLabel as="h2">Selected work</SectionLabel>
       </div>
       <div class="projects-grid">
         {
@@ -83,6 +81,7 @@ const projects = (await getCollection('projects'))
               href={p.href}
               meta={p.meta}
               bucket={p.bucket}
+              stack={p.stack}
               linkLabel={p.linkLabel}
               wide={i === projects.length - 1 && projects.length % 2 === 1}
             />
@@ -147,20 +146,23 @@ const projects = (await getCollection('projects'))
 
     <!-- About -->
     <section id="about" class="about">
-      <div class="about-copy">
-        <SectionLabel>About me</SectionLabel>
-        <h2 class="h2">Engineer by background.<br />Builder by choice.</h2>
-        <p class="body-sm">
-          I spent twelve years as a software engineer shipping production applications
-          — the kind where uptime, security and maintenance actually matter. Now I apply
-          that to AI.
-        </p>
-        <p class="body-sm">
-          The difference shows up in what I build: systems that know when they're
-          unsure, recover when an API fails, and can be audited when someone asks why
-          they did something. Based in Morocco, working with clients across Europe and
-          the US.
-        </p>
+      <div class="about-inner">
+        <div class="about-head">
+          <SectionLabel>About me</SectionLabel>
+          <h2 class="h2">Engineer by background.<br />Builder by choice.</h2>
+        </div>
+        <div class="about-copy">
+          <p class="body-sm">
+            Twelve years as a software engineer, shipping production applications where
+            uptime, security and maintenance actually mattered. Now I point that at AI.
+          </p>
+          <p class="body-sm">
+            It shows in what I build: systems that know when they're unsure, recover
+            when an API fails, and can be audited when someone asks why they did
+            something.
+          </p>
+          <p class="body-sm">Based in Morocco. Clients across Europe and the US.</p>
+        </div>
       </div>
     </section>
 
@@ -183,12 +185,15 @@ const projects = (await getCollection('projects'))
           Ready to build your<br /><span class="accent">next system</span>?
         </h2>
         <div class="footer-cta">
-          <p class="body-sm">Let's automate what's holding your business back.</p>
+          <p class="body-sm">
+            Bring the workflow that's eating your team's time. Thirty minutes is enough
+            to know if it's worth automating.
+          </p>
           <div>
             <Button href="#contact">Book a call</Button>
           </div>
         </div>
-        <a href="#top" class="footer-brand" aria-label="zakadev — home">
+        <a href="#top" class="footer-brand" aria-label="zakadev, home">
           <img src="/assets/zakadev-white.svg" alt="" class="footer-mark" />
           <span>zakadev</span>
         </a>
@@ -196,7 +201,7 @@ const projects = (await getCollection('projects'))
       <div class="footer-bar">
         <div class="footer-bar-inner section-inner">
           <span>&copy; 2026 zakadev. All rights reserved.</span>
-          <span>Built with focus. Engineered for results.</span>
+          <span>Morocco. Working with clients across Europe and the US.</span>
         </div>
       </div>
     </footer>
@@ -255,43 +260,50 @@ const projects = (await getCollection('projects'))
   }
 
   /* ---------- Hero ---------- */
+  /* The claim is the hero, so the copy column takes the larger share. The
+     visual shrinks first as the viewport narrows; the headline never does. */
+  /* Fixed proportions, not flex-basis negotiation: the copy column has to stay
+     wide enough for "that make businesses" to hold one line. */
   .hero {
     max-width: var(--container-max);
     margin: 0 auto;
-    padding: 56px var(--container-pad) 40px;
-    display: flex;
+    padding: 56px var(--container-pad) 48px;
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
     align-items: center;
-    gap: 48px;
+    gap: 56px;
   }
 
   .hero-copy {
-    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 32px;
     min-width: 0;
   }
 
+  /* No hard line breaks: the measure sets the rag, so the headline holds its
+     shape at every width instead of snapping at the ones we guessed. */
   .hero-title {
     font-family: var(--font-serif);
     font-weight: 400;
-    font-size: clamp(40px, 6.6vw, 68px);
-    line-height: 1.13;
+    font-size: clamp(38px, 4.6vw, 62px);
+    line-height: 1.1;
     letter-spacing: var(--tracking-display);
+    max-width: 22ch;
+    /* Evens the rag so the line does not end on "that". */
+    text-wrap: balance;
   }
 
   .hero-sub {
-    font: 400 18px/1.67 var(--font-sans);
+    font: 400 20px/1.6 var(--font-sans);
     color: var(--text-secondary);
-    max-width: 400px;
+    max-width: 46ch;
   }
 
   .hero-visual {
     position: relative;
-    width: 560px;
-    height: 420px;
-    flex: none;
-    max-width: 100%;
+    aspect-ratio: 4 / 3;
+    min-width: 0;
   }
 
   .tag {
@@ -309,23 +321,25 @@ const projects = (await getCollection('projects'))
     height: 1px;
     background: var(--border-hover);
   }
+  /* Percentages, not pixels: the visual is fluid now, so the labels have to
+     ride it rather than sit at coordinates that were true at 560px. */
   .tag-acquire {
-    top: 24px;
-    left: 120px;
+    top: 6%;
+    left: 21%;
   }
   .tag-retain {
-    top: 170px;
+    top: 40%;
     right: 0;
   }
   .tag-automate {
-    bottom: 10px;
-    left: 200px;
+    bottom: 3%;
+    left: 36%;
   }
 
   /* ---------- Stats ---------- */
   .stats {
     padding-top: 8px;
-    padding-bottom: 96px;
+    padding-bottom: 56px;
   }
   .stats-grid {
     margin: 0;
@@ -345,10 +359,20 @@ const projects = (await getCollection('projects'))
     border-left: none;
     padding-left: 0;
   }
+  /* Values sit on a shared baseline band, so a smaller word-value still leaves
+     every label on the same line across the row. */
   .stat-value {
-    font: 400 clamp(34px, 4vw, 44px) / 1 var(--font-serif);
+    font: 400 clamp(34px, 4vw, 44px) / 1.05 var(--font-serif);
     letter-spacing: var(--tracking-h2);
     color: var(--text-primary);
+    display: flex;
+    align-items: flex-end;
+    min-height: calc(clamp(34px, 4vw, 44px) * 1.05);
+  }
+
+  /* A word-value at number size wraps and drags the row out of alignment. */
+  .stat-value--words {
+    font-size: clamp(22px, 2.2vw, 26px);
   }
   .stat-label {
     margin: 0;
@@ -362,23 +386,35 @@ const projects = (await getCollection('projects'))
   .about {
     background: var(--bg-secondary);
   }
-  .about-copy {
+  /* Heading holds the left, prose answers on the right. The photo slot is gone,
+     so the asymmetry has to come from the type instead. */
+  .about-inner {
     max-width: var(--container-max);
     margin: 0 auto;
-    padding: 96px var(--container-pad);
+    padding: 104px var(--container-pad);
+    display: grid;
+    grid-template-columns: 5fr 6fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .about-head {
     display: flex;
     flex-direction: column;
     gap: 24px;
   }
-  /* Full-width section, but the paragraphs keep a readable measure. */
-  .about-copy .body-sm {
-    max-width: 68ch;
+  .about-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 62ch;
+    /* Optically aligns the first line with the heading's cap height. */
+    padding-top: 6px;
   }
 
-  /* ---------- Featured projects ---------- */
+  /* ---------- Selected work ---------- */
   .projects {
-    padding-top: 120px;
-    padding-bottom: 120px;
+    padding-top: 88px;
+    padding-bottom: 104px;
   }
   .projects-grid {
     display: grid;
@@ -386,10 +422,10 @@ const projects = (await getCollection('projects'))
     gap: 24px;
   }
 
-  /* ---------- Products & communities ---------- */
+  /* ---------- How I help ---------- */
   .offerings {
-    padding-top: 40px;
-    padding-bottom: 120px;
+    padding-top: 24px;
+    padding-bottom: 104px;
   }
   .offerings-list {
     border-top: 1px solid var(--border-1);
@@ -409,8 +445,8 @@ const projects = (await getCollection('projects'))
 
   /* ---------- FAQ ---------- */
   .faq-sec {
-    padding-top: 40px;
-    padding-bottom: 120px;
+    padding-top: 24px;
+    padding-bottom: 112px;
   }
   .faq-list {
     border-top: 1px solid var(--border-1);
@@ -491,27 +527,27 @@ const projects = (await getCollection('projects'))
 
   @media (max-width: 900px) {
     .hero {
-      flex-direction: column;
-      align-items: flex-start;
+      grid-template-columns: 1fr;
+      align-items: start;
       gap: 40px;
       padding-top: 40px;
     }
     .hero-visual {
       width: 100%;
       max-width: 520px;
-      height: auto;
-      aspect-ratio: 560 / 420;
-      align-self: center;
+      justify-self: center;
     }
-    .about-copy {
-      padding: 56px var(--container-pad);
+    .about-inner {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding: 64px var(--container-pad);
     }
     .projects-grid {
       grid-template-columns: 1fr;
     }
     .projects {
-      padding-top: 88px;
-      padding-bottom: 88px;
+      padding-top: 72px;
+      padding-bottom: 72px;
     }
   }
 
@@ -519,11 +555,18 @@ const projects = (await getCollection('projects'))
     .hero-sub {
       max-width: none;
     }
-    .tag {
+    /* The labels are what make the constellation mean anything, and they do not
+       fit here. Without them it is 250px of noise above the fold, so it goes. */
+    .hero-visual {
       display: none;
     }
     .stats-grid {
       grid-template-columns: repeat(2, 1fr);
+    }
+    /* Half the column width here, so the word-value drops another step rather
+       than wrapping and pushing its label off the row's line. */
+    .stat-value--words {
+      font-size: 18px;
     }
     /* Re-draw dividers for a 2-col grid: reset all, then border 3rd/4th on top. */
     .stat {
