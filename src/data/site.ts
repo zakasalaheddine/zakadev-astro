@@ -17,16 +17,14 @@ export interface SocialLink {
 }
 
 /**
- * Footer "Elsewhere" column. Only entries with an href render, so an unknown
- * profile leaves no dead link behind. Fill these in as they are confirmed.
+ * Footer "Elsewhere" column. Upwork leads: the stats row cites Top Rated Plus
+ * and 100% job success, and this is the profile that proves both.
  */
 export const socials: SocialLink[] = [
+  { label: 'Upwork', href: 'https://www.upwork.com/freelancers/zakadev' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/zakasalaheddine' },
   { label: 'GitHub', href: 'https://github.com/zakasalaheddine' },
   { label: 'Email', href: 'mailto:zakasalaheddine@gmail.com' },
-  /* TODO: paste the real URLs.
-  { label: 'Upwork', href: '' },
-  { label: 'LinkedIn', href: '' },
-  */
 ];
 
 export interface Stat {
