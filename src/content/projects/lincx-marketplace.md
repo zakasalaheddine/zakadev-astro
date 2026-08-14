@@ -12,100 +12,120 @@ year: 2026
 
 ## The short version
 
-I took an internal advertising platform that only power users could operate — the
-kind where the real answers live in five different admin screens and a person's
-head — and made it something anyone on the team can talk to in plain language
-inside Claude. Ask "which ad groups can actually run in this zone, and why isn't
-this one showing?" and get a correct, auditable answer in seconds instead of a
-half-day of clicking.
+An internal advertising platform, 78 API paths and 134 operations deep, spread
+across 63 client networks. Only a handful of people could actually read it. Ask
+it "which ads can run in this slot, and why isn't this one showing?" and the
+honest answer lived in five admin screens and one specialist's head.
 
-## What I was trying to achieve
+I turned the questions the team kept asking into installable Claude skills, then
+spent most of the project on the part that decides whether anyone trusts them:
+making the answers provably correct.
 
-Every growing business hits the same wall: the tools that run the business get
-more powerful, but only a handful of experts can actually read them. Everyone
-else waits on those experts. That queue is where momentum dies.
+## The bottleneck was never the interface
 
-The goal here wasn't "add an AI chatbot." It was to close that gap for real:
+Every growing business hits this wall. The tools that run the business get more
+powerful, and the number of people who can read them stays flat. Everyone else
+queues behind the experts, and the experts stop doing judgment work because they
+have become a human search engine for their own colleagues.
 
-- **Let non-experts get expert-grade answers** without learning the platform's
-  internals.
-- **Keep the answers trustworthy.** An AI that's confidently wrong about revenue
-  or ad targeting is worse than no AI. Every answer had to be something a manager
-  could stand behind.
-- **Free the experts** to do judgment work instead of being a human search
-  engine for their own colleagues.
+So the goal was not "add an AI chatbot". It was to let a non-expert get an
+expert-grade answer, and to make that answer something a manager could stand
+behind in front of a client. An AI that is confidently wrong about ad targeting
+is worse than no AI at all.
 
-## How it's built (in plain terms)
+## The question that turned out to be hard
 
-Two layers, kept deliberately separate:
+"Which ad groups are eligible to serve in this zone, and why is this one not?"
+sounds like a lookup. It is not. Eligibility depends on targeting rules and
+exclusions applied at two different levels, on shared inventory that leaks
+across groups, and on parent objects that can silently suppress everything
+below them.
 
-1. **A secure connection** between Claude and the platform. It handles login,
-   keeps each user inside their own data, and never lets the AI touch anything it
-   shouldn't. Credentials never pass through the AI.
-2. **A library of focused "skills"** — reports, inventory checks, targeting
-   explanations, performance analysis — that anyone can install into their own
-   Claude in one line and start using.
+The first version counted eligibility at ad-group grain. That is the grain the
+admin screens show, so it is the grain everyone assumes. It is wrong. A group
+can be ineligible while individual ads inside it are whitelisted onto the zone,
+and it can look healthy while every ad under it is held out by something else
+entirely. Counting groups over-counted the answer, and it hid the cases that
+actually matter.
 
-The design rule that made it work: **let the AI do language, not math.** The
-platform's own engine computes the hard, exact facts (who's eligible, what the
-numbers are). Claude's job is to explain them clearly and suggest next steps. So
-the AI is never guessing at the truth — it's translating a truth the system
-already knows.
+Late in the project a stakeholder sharpened one edge case and exposed exactly
+that. The fix was to re-model the join one grain finer, down to the individual
+offer, and it was cheap to do right because the logic lived in one small tested
+place rather than smeared across a dozen tool handlers. That is the whole thesis
+in miniature: build the truth once, in the open, and correcting it later is an
+edit instead of a rewrite.
 
-## A concrete example of the hard part
+## Proving it, rather than asserting it
 
-One feature answers "which ads are eligible to run in this slot, and why?" Sounds
-simple. It isn't — eligibility depends on overlapping targeting rules,
-exclusions, and shared-inventory leaks at two different levels.
+Correctness you cannot demonstrate is a claim. I ran thirteen verification
+passes against the eligibility tooling, across two production networks, plus a
+probe of 25 more, with every assertion checked against live API responses rather
+than fixtures.
 
-Late in the project a stakeholder sharpened the definition of one edge case: a
-category we were counting was being over-counted, because we were measuring at
-the wrong level of detail. The fix meant re-modeling the whole thing one grain
-finer — and the interesting part is that it was *cheap to do right*, because the
-logic lived in one small, well-tested place instead of being smeared across the
-UI. We tightened the definition, proved it against the real system, shipped it,
-and the guarantees the rest of the tool depended on stayed intact.
+That work fixed eight tooling defects, three of them blockers that stopped a
+sweep outright. The most instructive one was not a logic bug. A response guard
+was truncating oversized results by stripping fields from each row, so a large
+zone came back as a list of bare ids with the payload gone, and no way to re-run
+narrower. Rows run about 560 characters, so a 207-row zone is roughly 118k
+against a 30k guard. Even one bucket with names removed did not fit, which meant
+narrowing could never have worked. The fix was to page full rows instead of
+shedding them, so a row keeps its complete field set at any zone size.
 
-That's the whole thesis in miniature: **build the truth once, in the open, and
-correcting it later is a small edit instead of a rewrite.**
+Proving absence took the same discipline. To confirm one class of conflict
+simply does not occur, I swept all 1,150 ad groups in the network. To confirm
+another, all 1,331 ads. "We never saw it" is not the same as "it is not there",
+and only one of those is worth telling a client.
 
-## What I took away from it
+## What it found that nobody asked for
 
-- **The moat isn't the model — it's the plumbing.** The value came from the
-  boring, careful work: clean access to the real data, correct business rules,
-  and answers you can audit. The AI is the easy, swappable part.
-- **Trust is a feature you design in, not bolt on.** Fixed output formats,
-  read-only by default, "show your work" answers, and never letting the AI invent
-  a number — those choices are what make people actually adopt it.
-- **Separate the exact from the expressive.** Machines should own the facts;
-  the LLM should own the phrasing. Blur that line and you get confident nonsense.
+The tooling surfaced live configuration bugs that had been invisible to every
+existing screen.
+
+- **18 ads across 8 ad groups carried a zone whitelist naming a zone their
+  parent group cannot reach.** The whitelist never fires, because the parent
+  filter runs first. Six of those groups are live. They serve nothing on that
+  zone, and nothing in the platform said so, because the groups were dropped
+  from every bucket before anyone could see them. That class now has its own
+  bucket and its own signal.
+- **One archived ad whitelisted a zone that no longer exists.** A non-empty
+  whitelist is treated as confining, so that ad serves in zero zones network
+  wide and looks identical to an ad legitimately scoped elsewhere.
+- **One ad group weighed 232 KB**, of which a single targeting field held 8,931
+  ZIP codes. The tooling handles it now. The record itself is still worth a look.
+
+Finding those was not the brief. It is what happens when you model the domain
+properly instead of wrapping the API and hoping the model reasons its way to the
+truth.
+
+## The design rule that made it work
+
+**Let the AI do language, not math.** The platform's own engine computes the
+exact facts: who is eligible, what the numbers are. Claude explains them and
+suggests what to do next. The model is never guessing at truth, it is
+translating a truth the system already knows.
+
+Everything else followed from that. Fixed output shapes, read-only by default,
+answers that show their work, and never a number the model invented. Naming got
+the same treatment. When a counter read as a problem where none existed, I
+renamed it rather than documenting around it. When a reviewer proposed a second
+counter that I could break with a counter-example, we shipped a per-row live
+signal instead of a headline number that would mislead. Both branches are pinned
+by unit tests, so a regression fails CI whether or not production data still
+contains the shape.
+
+## What I took away
+
+- **The moat is not the model, it is the plumbing.** Clean access to real data,
+  correct business rules, auditable answers. The AI is the easy, swappable part.
+- **Get the grain right before you get the interface right.** Every wrong number
+  in this project traced back to counting at the level the UI happened to show
+  rather than the level the truth lives at.
+- **Absence has to be proven.** Exhaustive sweeps are boring, and they are the
+  difference between a demo and something a manager will repeat to a client.
 - **Small, single-purpose tools beat one giant one.** Each skill does one thing,
-  so it's easy to trust, test, and improve without breaking the others.
-
-## How other businesses can use this
-
-You almost certainly have the same pattern: a powerful internal system, a few
-experts who can read it, and everyone else waiting on them. Here's the playbook
-this project proves out:
-
-1. **Start from a real bottleneck, not from "we should use AI."** Find the
-   question people keep pinging an expert for. That's your first skill.
-2. **Connect the AI to your source of truth safely** — scoped to each user,
-   read-only to start, credentials never exposed. This is the foundation
-   everything else stands on.
-3. **Let your existing systems compute the facts; let the LLM explain them.**
-   Don't ask the model to be your calculator or your database. Ask it to be your
-   translator and your analyst.
-4. **Make every answer auditable.** Consistent formats and visible reasoning turn
-   "a neat demo" into "a tool the team relies on."
-5. **Ship narrow, then widen.** One trustworthy skill that people use daily beats
-   a sprawling assistant nobody trusts.
-
-Done this way, LLMs stop being a novelty and become infrastructure — the layer
-that lets your whole team operate tools that used to need a specialist. That's
-the shift: not replacing the experts, but giving everyone else a fluent way in.
+  so it is cheap to trust, test and improve without breaking its neighbours.
 
 ---
 
-*Built with Claude Code and the Model Context Protocol. The platform stays the
-system of record; the AI is the interface to it.*
+*Built with Claude Code and the Model Context Protocol, on top of the Lincx MCP
+server. The platform stays the system of record; the AI is the interface to it.*
