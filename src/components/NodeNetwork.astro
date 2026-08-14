@@ -23,7 +23,9 @@
 
   const c = document.querySelector('canvas.net') as HTMLCanvasElement | null;
 
-  if (c) {
+  // Hidden below 560px, where `display: none` leaves a zero-size canvas. Without
+  // this the animation loop keeps running on phones, drawing nothing.
+  if (c && c.getBoundingClientRect().width > 0) {
     const ctx = c.getContext('2d');
 
     // Logical drawing space. The backing store is scaled to the device pixel

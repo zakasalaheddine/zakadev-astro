@@ -112,6 +112,10 @@ const { title, subtitle, role, stack, year } = entry.data;
     font: var(--type-body);
     color: var(--text-secondary);
   }
+  /* The global reset zeroes p margins, so consecutive paragraphs ran together. */
+  .prose :global(p) {
+    margin: 0 0 var(--space-5);
+  }
   .prose :global(ul),
   .prose :global(ol) {
     padding-left: var(--space-5);
