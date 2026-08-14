@@ -21,6 +21,15 @@ networks.
 Every report, every inventory check, every "why isn't this ad running?" answer
 flows through this one door. Credentials never reach the model.
 
+## What it carries
+
+Ten-plus people work through this server today, managers across the company
+rather than the two or three specialists who could read the platform before.
+The debugging question that used to cost a day and occupy several engineers at
+once now takes one person about two minutes, and every one of those answers is
+authenticated, scoped to the right client, and read from the live platform by
+this layer.
+
 ## The constraint that shaped everything
 
 The platform is multi-tenant. One person may work across several client

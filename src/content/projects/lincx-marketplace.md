@@ -1,8 +1,8 @@
 ---
 title: Lincx Claude Marketplace
 subtitle: >-
-  A whole team can now ask an ad platform questions in plain language and get
-  auditable, expert-grade answers in seconds.
+  Ad debugging that cost a day and several engineers now takes one person two
+  minutes, in plain language, with an auditable answer.
 meta: Client system
 bucket: Cut costs
 role: Design & build
@@ -20,6 +20,20 @@ honest answer lived in five admin screens and one specialist's head.
 I turned the questions the team kept asking into installable Claude skills, then
 spent most of the project on the part that decides whether anyone trusts them:
 making the answers provably correct.
+
+## What changed
+
+Figures from the team using it.
+
+- **A zone-debugging question went from a day to two minutes.** It used to take
+  at least a full day, and it pulled in several engineers who each repeated the
+  same investigation independently. One person now answers it in about two
+  minutes.
+- **Ten-plus people use it, managers across the company**, not the two or three
+  specialists who could read the platform before.
+- **Onboarding cost is effectively gone.** There is no admin-screen learning
+  curve to climb when the interface is a question. New people ask, and get the
+  same auditable answer a specialist would have produced.
 
 ## The bottleneck was never the interface
 
