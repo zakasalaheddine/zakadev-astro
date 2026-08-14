@@ -10,7 +10,24 @@ import FaqItem from '../components/FaqItem.astro';
 import TechTile from '../components/TechTile.astro';
 import NodeNetwork from '../components/NodeNetwork.astro';
 import { getCollection } from 'astro:content';
-import { stats, services, posts, writingIndexHref, faqs, tech } from '../data/site';
+import {
+  stats,
+  services,
+  posts,
+  writingIndexHref,
+  faqs,
+  tech,
+  socials,
+  bookingHref,
+} from '../data/site';
+
+/* Same destinations as the nav, minus the CTA: the footer restates the page. */
+const footerNav = [
+  { label: 'Work', href: '#work' },
+  { label: 'How I help', href: '#services' },
+  { label: 'FAQ', href: '#faq' },
+  { label: 'About', href: '#about' },
+];
 
 /* Only real case studies go in the grid — no placeholder cards. Newest first,
    capped at 3: the grid is a 2+1 layout and a fourth card breaks it. */
@@ -42,7 +59,7 @@ const projects = (await getCollection('projects'))
           More customers. More revenue from each one. Fewer hours lost to manual work.
         </p>
         <div>
-          <Button href="#contact" arrow fillHover>Book a call</Button>
+          <Button href={bookingHref} arrow fillHover>Book a call</Button>
         </div>
       </div>
       <div class="hero-visual">
@@ -190,18 +207,39 @@ const projects = (await getCollection('projects'))
             to know if it's worth automating.
           </p>
           <div>
-            <Button href="#contact">Book a call</Button>
+            <Button href={bookingHref}>Book a call</Button>
           </div>
         </div>
-        <a href="#top" class="footer-brand" aria-label="zakadev, home">
-          <img src="/assets/zakadev-white.svg" alt="" class="footer-mark" />
-          <span>zakadev</span>
-        </a>
       </div>
+
+      <div class="footer-map section-inner">
+        <nav class="foot-nav" aria-label="Footer">
+          {footerNav.map((l) => <a href={l.href}>{l.label}</a>)}
+        </nav>
+
+        <div class="foot-cols">
+          <div class="foot-col">
+            <h3 class="foot-col-title">Case studies</h3>
+            {projects.map((p) => <a href={p.href}>{p.name}</a>)}
+          </div>
+          <div class="foot-col">
+            <h3 class="foot-col-title">Elsewhere</h3>
+            {socials.map((s) => <a href={s.href}>{s.label}</a>)}
+          </div>
+          <p class="foot-blurb">
+            AI systems that make businesses money. Based in Morocco, working with
+            clients across Europe and the US.
+          </p>
+        </div>
+      </div>
+
+      <!-- Decorative: the brand is already named in the nav and the copyright. -->
+      <div class="wordmark" aria-hidden="true">zakadev</div>
+
       <div class="footer-bar">
         <div class="footer-bar-inner section-inner">
           <span>&copy; 2026 zakadev. All rights reserved.</span>
-          <span>Morocco. Working with clients across Europe and the US.</span>
+          <span>Built with Astro. No trackers, no cookie banner.</span>
         </div>
       </div>
     </footer>
@@ -465,11 +503,16 @@ const projects = (await getCollection('projects'))
   }
 
   /* ---------- Footer ---------- */
+  /* Sizing context for the full-bleed wordmark below. */
+  .footer {
+    container-type: inline-size;
+  }
+
   .footer-top {
     padding-top: 120px;
-    padding-bottom: 96px;
+    padding-bottom: 88px;
     display: grid;
-    grid-template-columns: 6fr 4fr 2fr;
+    grid-template-columns: 6fr 5fr;
     gap: 48px;
     align-items: center;
   }
@@ -485,21 +528,84 @@ const projects = (await getCollection('projects'))
     flex-direction: column;
     gap: 20px;
   }
-  .footer-brand {
+  /* ---------- Footer site map ---------- */
+  .footer-map {
+    padding-bottom: 72px;
+    border-top: 1px solid var(--border-1);
+    padding-top: 48px;
+  }
+
+  /* The page's four destinations, restated at display size and spread edge to
+     edge. This is the row that makes the footer read as a place, not a margin. */
+  .foot-nav {
     display: flex;
-    align-items: center;
-    gap: 12px;
-    justify-self: end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px 40px;
+    margin-bottom: 64px;
+  }
+  .foot-nav a {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(26px, 3.6vw, 44px);
+    line-height: 1.1;
+    letter-spacing: var(--tracking-h2);
     color: var(--text-primary);
   }
-  .footer-brand span {
-    font: 500 22px/1 var(--font-sans);
-    letter-spacing: -0.02em;
+  .foot-nav a:hover {
+    color: var(--orange);
   }
-  .footer-mark {
-    height: 34px;
-    width: auto;
+
+  .foot-cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) minmax(0, 1.4fr);
+    gap: 40px;
   }
+  .foot-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .foot-col-title {
+    font: var(--type-caption);
+    letter-spacing: var(--tracking-caption);
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .foot-col a {
+    font: var(--type-small);
+    color: var(--text-secondary);
+  }
+  .foot-col a:hover {
+    color: var(--text-primary);
+  }
+  .foot-blurb {
+    font: var(--type-small);
+    color: var(--text-muted);
+    max-width: 42ch;
+    justify-self: end;
+  }
+
+  /* Full-bleed brand line. The size is derived, not guessed: "zakadev" in Sora
+     at this tracking runs ~4.1x its own font size, so width / 4.1 fills the
+     container exactly, and the vw term keeps that true below the max width. */
+  .wordmark {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    /* Measured: the word renders 3.75x its font size at this tracking. Container
+       units, not vw, so a desktop scrollbar cannot clip the last letter. */
+    font-size: min(calc((100cqw - 2 * var(--container-pad)) / 3.75), 341px);
+    line-height: 0.86;
+    letter-spacing: -0.045em;
+    text-align: center;
+    color: var(--text-primary);
+    padding: 0 var(--container-pad);
+    overflow: hidden;
+    user-select: none;
+  }
+
   .footer-bar {
     border-top: 1px solid var(--border-1);
   }
@@ -520,8 +626,13 @@ const projects = (await getCollection('projects'))
       grid-template-columns: 1fr;
       gap: 32px;
     }
-    .footer-brand {
+    .foot-cols {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .foot-blurb {
+      grid-column: 1 / -1;
       justify-self: start;
+      max-width: none;
     }
   }
 
@@ -559,6 +670,13 @@ const projects = (await getCollection('projects'))
        fit here. Without them it is 250px of noise above the fold, so it goes. */
     .hero-visual {
       display: none;
+    }
+    /* Spread across a wrapped row leaves one orphan pushed to an edge, so the
+       links close up into a left-aligned cluster instead. */
+    .foot-nav {
+      justify-content: flex-start;
+      gap: 16px 28px;
+      margin-bottom: 48px;
     }
     .stats-grid {
       grid-template-columns: repeat(2, 1fr);

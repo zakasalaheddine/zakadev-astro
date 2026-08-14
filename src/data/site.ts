@@ -3,6 +3,32 @@
  * Sections are added here as we build them.
  */
 
+/**
+ * Where every "Book a call" on the site points. Set this to the real booking
+ * page (Cal.com / Calendly) and the nav, hero, service rows and footer all
+ * follow. Until then it jumps to the footer CTA, which books nothing.
+ * TODO: replace with the booking URL.
+ */
+export const bookingHref = '#contact';
+
+export interface SocialLink {
+  label: string;
+  href: string;
+}
+
+/**
+ * Footer "Elsewhere" column. Only entries with an href render, so an unknown
+ * profile leaves no dead link behind. Fill these in as they are confirmed.
+ */
+export const socials: SocialLink[] = [
+  { label: 'GitHub', href: 'https://github.com/zakasalaheddine' },
+  { label: 'Email', href: 'mailto:zakasalaheddine@gmail.com' },
+  /* TODO: paste the real URLs.
+  { label: 'Upwork', href: '' },
+  { label: 'LinkedIn', href: '' },
+  */
+];
+
 export interface Stat {
   /** The headline number, e.g. "12+". */
   value: string;
@@ -43,19 +69,19 @@ export const services: Service[] = [
   {
     name: 'Get more customers',
     description: 'Lead qualification, follow-up that never forgets, intake that drops nothing.',
-    href: '#contact',
+    href: bookingHref,
     linkLabel: 'Book a call',
   },
   {
     name: 'Make customers worth more',
     description: 'Onboarding that runs itself, CRM automation, lifecycle triggers.',
-    href: '#contact',
+    href: bookingHref,
     linkLabel: 'Book a call',
   },
   {
     name: 'Cut costs',
     description: 'Internal knowledge assistants, automated reporting, ticket triage.',
-    href: '#contact',
+    href: bookingHref,
     linkLabel: 'Book a call',
   },
 ];
