@@ -52,6 +52,24 @@ h1, h2, h3, h4, p {
   margin: 0;
 }
 
+/* Shared by the page sections and the footer component. Astro scopes component
+   styles, so anything used in more than one component has to live here. */
+.section-inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: var(--container-pad);
+  padding-right: var(--container-pad);
+}
+
+.accent {
+  color: var(--orange);
+}
+
+.body-sm {
+  font: 400 15px/1.73 var(--font-sans);
+  color: var(--text-secondary);
+}
+
 :focus-visible {
   outline: 2px solid var(--orange);
   outline-offset: 3px;

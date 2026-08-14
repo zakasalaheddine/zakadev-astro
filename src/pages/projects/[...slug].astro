@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
 
 export async function getStaticPaths() {
   const entries = await getCollection('projects');
@@ -34,6 +35,8 @@ const { title, subtitle, role, stack, year } = entry.data;
       </div>
     </article>
   </div>
+
+  <Footer />
 </BaseLayout>
 
 <style>
