@@ -1,4 +1,6 @@
 ---
+import { bookingHref } from '../data/site';
+
 const links = [
   { label: 'Work', href: '/#work' },
   /* No "Writing" link — the section is hidden until real posts exist. */
@@ -31,7 +33,7 @@ const links = [
     <nav class="links-pill" id="nav-menu">
       {links.map((l) => <a class="link" href={l.href}>{l.label}</a>)}
       <span class="divider" aria-hidden="true"></span>
-      <a class="book" href="/#contact">
+      <a class="book" href={bookingHref} target="_blank" rel="noopener">
         Book a call
         <span class="book-dot" aria-hidden="true"></span>
       </a>

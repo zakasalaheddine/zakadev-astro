@@ -9,9 +9,16 @@ interface Props {
 }
 
 const { name, description, href = '#', badge, linkLabel = 'Learn more' } = Astro.props;
+/* Matches the buttons: an off-site destination opens in its own tab. */
+const external = href.startsWith('http');
 ---
 
-<a class="row" href={href}>
+<a
+  class="row"
+  href={href}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener' : undefined}
+>
   <div class="row-main">
     <div class="row-head">
       <span class="row-name">{name}</span>

@@ -18,9 +18,17 @@ interface Props {
 const { href, variant = 'primary', arrow = false, fillHover = false, class: className } =
   Astro.props;
 const Tag = href ? 'a' : 'button';
+/* Off-site destinations (the booking page) open in their own tab, so a visitor
+   who books still has the site behind them. */
+const external = href?.startsWith('http');
 ---
 
-<Tag class:list={['btn', fillHover && 'btn--fill', className]} href={href}>
+<Tag
+  class:list={['btn', fillHover && 'btn--fill', className]}
+  href={href}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener' : undefined}
+>
   <slot />
   {
     arrow ? (

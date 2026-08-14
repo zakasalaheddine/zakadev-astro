@@ -4,12 +4,10 @@
  */
 
 /**
- * Where every "Book a call" on the site points. Set this to the real booking
- * page (Cal.com / Calendly) and the nav, hero, service rows and footer all
- * follow. Until then it jumps to the footer CTA, which books nothing.
- * TODO: replace with the booking URL.
+ * Where every "Book a call" on the site points: the nav, the hero, the three
+ * service rows and the footer all read this one constant.
  */
-export const bookingHref = '#contact';
+export const bookingHref = 'https://cal.com/zakadev';
 
 export interface SocialLink {
   label: string;
